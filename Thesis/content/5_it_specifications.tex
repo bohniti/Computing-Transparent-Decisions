@@ -1,0 +1,204 @@
+
+% !TeX spellcheck = en_GB
+% !TeX encoding = UTF-8
+\chapter{Implementation}
+\label{ch:it_specifications}
+\epigraph{"What would life be if we had no courage to attempt anything?"}{-Vincent Van Gogh}
+
+The first steps in the pseudocode example, which defines the functionalities of the prototype is not about \gls{xai}. It focuses on the development of a predictive model which uses deep learning. So first of all, the scope of this chapter is on the technical details of the prototype. The most popular deep learning models leveraged for computer vision problems are convolutional neural networks (CNN). The topic is already addressed in the theory chapter, but Figure \ref{fig:cnn_summary} you can see a short overview of the most important key points.
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=1\linewidth]{photo/35_cnn_summary}}
+	\caption{Keypoints of an example cnn architecture (VGG16)}
+	\label{fig:cnn_summary}
+\end{figure}
+
+\section{Developing a predictive deep learning model with transfer learning}
+
+In the context of this thesis, the implementation of transparent \gls{cnn} Models is the main objective. Therefore the exact architecture and the achieved accuracy of the predictions will not be explained in the tiniest detail. Furthermore, developing and training a model costs a lot of time and effort. Instead of starting from scratch, it makes sense to build on an already existing architecture, because the effort will be less huge. Besides, it saves a lot of time to use pre-trained network.\\
+
+An opportunity is to leverage the power of transfer learning and retrained models. This model was trained on advanced hardware, with a tremendous amount of data and time to adjust the weights as close as possible to a massive amount of different claes. Considering this fact, the model has already learnt a robust hierarchy of features. Consequently, the model is useful for extract representations of features for over a million images to 1,000 different categories. So it can act as a  feature extractor for new images suitable for a computer vision problem.\\
+
+The model which is used in the prototype is the VGG16. His architecture can be seen in Figure \ref{fig:vgg16}. The name is determined by its 16 different layers which consist of Convolutional layers, max-pooling layers, activation layers and fully connected layers. 
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=1\linewidth]{photo/36_architecture_from_vgg16_net.png}}
+	\caption{Keypoints of an example cnn architecture (VGG16)}
+	\label{fig:vgg16}
+\end{figure}
+
+There are 13 convolutional layers, 5 Max Pooling layers and 3 Dense layers which sum up to 21 layers but only 16 weight layers.
+Conv 1 has 64 filters while Conv 2 has 128 filters, Conv 3 has 256 filters while Conv 4 and Conv 5 has 512 filters.
+VGG-16 network is trained on ImageNet dataset, which has over 14 million images and 1000 classes, and archives 92.7\% top-5 accuracy. It exceeds AlexNet (another \gls{cnn} Architecture) by replacing large filters of size 11 and 5 in the first and second convolution layers with small size 3x3 filters.
+
+Once again, the general idea behind transfer learning for image recognition is that if a model is trained (pre-trained, transfer learned) on a large and broad enough dataset, this model can be seen as a generic model approach of the real world. So it is easier to take advantage of these learned feature maps. It is much more productive instead of training such a model from scratch. To do so a massive amount of hardware resources (computation power) have to be available. 
+
+Usually, there are two approaches which can be used to customize a pre-trained model:
+
+\begin{enumerate}
+	\item Feature Extraction: Use the representations learned by a previous network to extract important features from new samples. You add a new classifier, which will be trained from scratch, on top of the pre-trained model so that you can repurpose the feature maps learned previously for the dataset.\\
+	
+	There is no need to train the entire model again. The base of a convolutional network already contains generically useful features.  It is therefore used to make predictions on images. However, the final, classification part of the pre-trained model is specific to the original classification task, and subsequently particular to the set of classes on which the model was trained.
+	
+	\item 
+	Fine-Tuning: This is a more involved technique, where we do not just replace the final layer (for classification/regression), but we also selectively retrain some of the previous layers. Deep neural networks are highly configurable architectures with various hyperparameters. As discussed earlier, the initial layers have been seen to capture generic features, while the later ones focus more on the specific task at hand. An example is depicted in the following figure on a face-recognition problem, where initial lower layers of the network learn very generic features and the higher layers learn very task-specific features.
+\end{enumerate}
+
+While keeping the functional specifications in mind, the prototype can use the machine learning framework TensorFlow. So, it can fulfil the technical requirements with state-of-the-art technology. TensorFlow is an end-to-end open-source platform for machine learning. It has a comprehensive, flexible ecosystem of tools, libraries and community resources that makes it easier to implement the prototype while not losing the scope of my focus. It will not work to explain all details of every single software library which is used in the following. Even more, since those libraries have huge documentations on the Internet. Instead the next paragraph aim on the implementation process.
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=1\linewidth]{photo/37_hierachical_feature_representations}}
+	\caption{An example is depicted in the following figure on a face-recognition problem, where initial lower layers of the network learn very generic features and the higher layers learn very task-specific features.
+	}
+	\label{fig:hierachical_feature_representations}
+\end{figure}
+
+An example of why transfer learning does work is described in  Figure \ref{fig:hierachical_feature_representations}. The example shows that \gls{dl} Systems and Models are in a layered architectures that learn different features at different layers (hierarchical representations of layered features). These layers are then finally connected to the last layer (usually a fully connected layer, in the case of supervised learning) to get the final output. This layered architecture allows utilizing a pre-trained network without its final layer as a fixed feature extractor for other tasks.
+
+The implementation of the transfer learning model follows along with these steps:
+\begin{itemize}
+	\item Examine and understand the data
+	\item Build an input pipeline, in this case using TensorFlow ImageDataGenerator
+	\item Compose the model
+	\item Load in the pre-trained base model (and pretrained weights)
+	\item Stack the classification layers on top
+	\item Train, the model
+	\item Evaluate model
+\end{itemize}
+
+Even though the dataset can be downloaded from kaggle.com the machine learning framework Tensor Flow provides an own class which held the datasets. This software package is called tfds and can be used direly to get the data on your local machine. Another advantage is that data can be split into a train and a test datasets. So, with the following lines of code step one is entirely solved:\\
+
+\begin{python}[label={lst:load}, caption= The "Dogs vs Cats" dataset gets loaded from the TensorFlow libbrary. The data will be spllited directliy into a test and train set.]
+
+# TensorFlow Function to laod a Dataset 
+
+(raw_train, raw_validation, raw_test), metadata = tfds.load(
+'cats_vs_dogs',
+
+# function which split the data into two sets,
+# such that results on unseen data can be predicted
+
+split=['train[:80%]', 'train[80%:90%]', 'train[90%:]'],
+with_info=True,
+as_supervised=True,)
+\end{python}
+
+It means the first milestones from the functional specifications are set, and step two can be set in focused now. Since the data is not just loaded onto the local machine, even more, it's split in train and test datasets a first part of the second Milestone (Data processing)is solved. Moreover, the next steps can be solved almost with the entire library and a few more dependencies, e.g. numpy-framework. A listing of the entire code and each implementation step or more detailed explanations would end in poor documentation of how the code was written. So, instead, a small summary is enough to present the most important insights from the transfer learning process.\\
+
+When working with a small dataset, it is a common practice to take advantage of features learned by a model trained on a larger dataset in the same domain. This is done by instantiating the pre-trained model and adding a fully-connected classifier on top. In the following you can see the summary of the \gls{cnn} model as it was before and for comparison how the summary looks like after adding the dataset-specific classifier layers on top. The pre-trained model is "frozen", and only the weights of the classifier get updated during training. In this case, the convolutional base extracted all the features associated with each image, and you just trained a classifier that determines the image class given. \\\\\\\\
+
+\begin{python}[label={lst:cnn_summary_before}, caption={Model summary before adding layers for the prediction of probabilities}]
+Layer (type)                    Output Shape         Param #     Connected to                     
+==============================================================
+input_1 (InputLayer)            [(None, 160, 160, 3) 0                                            
+______________________________________________________________
+Conv1_pad (ZeroPadding2D)       (None, 161, 161, 3)  0       input_1                   
+______________________________________________________________
+Conv1 (Conv2D)                  (None, 80, 80, 32)   864       Conv1_pad              
+______________________________________________________________
+...
+___________________
+block_5_depthwise_BN (BatchNorm (None, 20, 20, 192)  768    block_5_depthwise          
+______________________________________________________________
+block_5_depthwise_relu (ReLU)   (None, 20, 20, 192)  0        block_5_depthwise      
+
+Conv_1_bn (BatchNormalization)  (None, 5, 5, 1280)   5120    Conv_1                    
+______________________________________________________________
+out_relu (ReLU)                 (None, 5, 5, 1280)   0          Conv_1_bn                  
+==============================================================
+Total params: 2,257,984
+Non-trainable params: 2,257,984
+\end{python}
+
+\begin{python}[label={lst:cnn_summary_after}, caption={Model summary before adding layers for the prediction of probabilities}]
+Layer (type)                 Output Shape              Param #   
+=================================================================
+mobilenetv2_1.00_160 (Model) (None, 5, 5, 1280)        2257984   
+_________________________________________________________________
+global_average_pooling2d (Gl (None, 1280)              0         
+_________________________________________________________________
+...         
+_________________________________________________________________
+dense_1 (Dense)              (None, 1024)              1311744   
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 1024)              0         
+_________________________________________________________________
+dense_2 (Dense)              (None, 512)               524800    
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 512)               0         
+_________________________________________________________________
+dense_3 (Dense)              (None, 1)                 513       
+=================================================================
+Total params: 4,095,041
+Trainable params: 1,837,057
+Non-trainable params: 2,257,984
+\end{python}
+
+
+
+To present a complete overview of the implemented model in Figure \ref{fig:to_predcit} you can see four images which got predicted correct:
+
+\begin{figure}[!htp]
+	\centering
+	\fbox{\includegraphics[width=0.85\linewidth]{photo/38_to_predict_images.png}}
+	\caption{Images which got into an machine learning algorithm (CNN-VGG16 Architecture) and got predicted correct}
+	\label{fig:to_predcit}
+\end{figure}
+
+\begin{python}[label={pred}, caption={Predictions of the pretrained VGG-16 Architecture CNN model}]
+[['0', 'cat'], 
+['0', 'cat'], 
+['1', 'dog'], 
+['1', 'dog']]
+\end{python}
+
+\section{Making Transparent Decicions}
+
+To make the predictions transparent, the Prototype uses the shap technique. It combines different ideas from Integrated Gradient, SHapley Additive exPlanations (SHAP). This technique tries to explain model decisions using expected gradients (an extension of integrated gradients). This is a feature attribution method designed for differentiable models based on an extension of Shapley values to infinite player games. The Prototype uses the shap framework here for this technique.
+Integrated gradients values are a bit different from SHAP values and require a single reference value to be integrated. However, in SHAP Gradient Explainer, expected gradients reformulate the integral as an expectation and combine that expectation with sampling reference values from the background dataset. Therefore this technique uses an entire dataset as the background distribution versus just a single reference value.\\
+
+After the model has been loaded, the necessary layers have been added and a set of examples have been recognized correctly, the algorithm behind the prototype calculates the attributes for every single image example. As you can see in Listing \ref{lst:shapCode} der total amount of lines of code is pretty low and straight forward. Whereas the code itself is simple, the logic behind it is quite complex. In the Theory Chapter the fundamentals of this approach where described the following. Moreover a intuitive way to interpreted to results was presented. So, in the next chapter this intuition will be used to evaluate the results.
+
+\begin{lstlisting}[captionpos=b,label={lst:shapCode}, float=tb,language=Python, caption= asadd]
+# utility function to pass inputs to specific model layers
+# def map2layer(x, layer):
+
+feed_dict = dict(zip([model.layers[0].input], 
+[preprocess_input(x.copy())]))
+
+return K.get_session().run(model.layers[layer].input, feed_dict)
+
+# focus on the 7th layer of CNN model
+
+print(model.layers[7].input)
+Out [46]:
+<tf.Tensor 'block2_pool_2/MaxPool:0' shape=(1, 56, 56, 128)
+dtype=float32>
+
+# make model predictions
+
+e = shap.GradientExplainer((model.layers[7].input,
+model.layers[-1].output), map2layer(
+preprocess_input(X.copy()), 7))
+shap_values, indexes = e.shap_values(map2layer(to_predict, 7),
+ranked_outputs=2)
+index_names = np.vectorize(lambda x:
+class_names[str(x)][1])(indexes)
+
+print(index_names)
+
+Out [47]: array([['chain', 'chain_mail'],
+['great_grey_owl', 'prairie_chicken'],
+['desktop_computer', 'screen'],
+['Egyptian_cat', 'tabby']], dtype='<U16')
+
+# visualize model decisions
+visualize_model_decisions(shap_values=shap_values, x=to_predict, 
+labels=index_names, figsize=(20, 40))
+\end{lstlisting}
+
+
+

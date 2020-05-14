@@ -1,0 +1,85 @@
+% !TeX spellcheck = en_GB
+\chapter{Introduction}
+\label{ch:Introduction}
+\epigraph{"Most times, the way isn’t clear, but you want to start anyway. It is in starting with the first step that other steps become clearer."}{― Israelmore Ayivor, Leaders' Frontpage: Leadership Insights from 21 Martin Luther King Jr. Thoughts}
+\section{Upload Filter in the public discussion}
+\label{sec:directiveCopyrightUploadFilters}
+
+The "Directive on Copyright in the EU Digital Single Market", which came into force on the 7th of June in 2019,  introduced a requirement for an automated \gls{ul}. The discussion refers to Article 17 (previously Article 13) because it forces content-sharing services such as Facebook, Google and YouTube to be responsible for copyright violations. From this point on, it is no longer possible to check contents manually \cite{Emmawoollacott2019}.\\
+
+In Figure \ref{fig:00_protest_gegen_upload_filter} you can see Protesters in Berlin. For them, the fear of an \gls{ul} is real. They are concerned that these filters can harm their business as small content creators or their freedom of speech.
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[width=0.8\linewidth]{photo/00_protest_gegen_upload_filter.jpeg}
+	\caption{In Berlin, opponents of the copyright directive are protesting. They fear that Article 13 will lead to upload filters, which they see as a danger considering different aspects \cite{Protestg81:online}.}
+	\label{fig:00_protest_gegen_upload_filter}
+\end{figure}
+
+Different parties, organizations and scientists are arguing for and against the copyright directive. For example, the Christian Democratic Union (CDU)  and its representative at the European Parliament Axel Foss support the directive.  He said that it protects the freedom of expression on the internet and a diverse media landscape \cite{Europarl2017}. Critics as Julia Reda from th e Pirate Party  (also a member of the European Parliament) denies this statement. She described it as a change into a dark future for internet freedom, when upload filters would check every content automatically \cite{Emmawoollacott2019}.\\
+
+More precisely, she assumes that technology does not know the nuances of particular copyright law yet. And even more, she fears that small content creators are not able to interpret the decisions of the upload filters \cite{Reda2019}. Dr Gallwitz is an associate professor at the Technical University of Nuremberg where he is researching in the field of pattern recognition. He criticized that there is no smart software that could recognize quotations from other sources \cite{Gallwitz2019}.\\
+
+Instead of using smart software, a real-world \gls{ul} is realized through fingerprinting. This technique allows comparing blocked content with the latest user-generated content. The hardware requirements which are needed to compare the contents are proportionally small. Less high hardware requirements are one of the reasons why most companies still use older techniques (e.g. hash values), even they can build smarter \gls{ml} models \cite{Spoerri2019} \cite{Wagner1983}.\\
+
+The Microsoft software Photo-DNA identifies child pornography with the fingerprinting method, e.g. if an image in Microsoft's database is marked as pornographic. That means YouTube can detect when someone wants to upload such an image to the platform \cite{Microsoft2013}. The Software Content ID uses the same technique to identify copyright offences. It is used and developed by YouTube. That shows how Technique Companies are responsible for which method is used. Even scientific research has shown that different approaches are performing better, the companies have to see this decision from a business point of view \cite{YouTube2010}.\\
+
+Using \gls{ml} models as upload filters in the future could be possible, but among this usage are many problems. One of them is to get labelled data (necessary to train a model) which can detect patterns. Another problem is to define the patterns or the labels itself \cite{WaltermannHubertus2019}. Labels are categories which you could assign to an image \cite{Goodfellow-et-al-2016} e. g. attach the label cat to an image with a cat. In the case of copyright violations or offensive content, we block any item that has labels with copyright content. A machine learning algorithm which can detect all assaulting labels alone must be complex because the complexity from machine learning algorithms is increasing with increasing input features and an increasing amount of expected outputs \cite{Yao2017}. In machine learning terms, a feature is any input we can put into a machine learning algorithm, e.g. an image with 32 x 32 pixels has 1024 input features because every pixel counts as a single feature \cite{Goodfellow-et-al-2016}.
+
+\section{Upload filters and Explainable Artificial Intelligence}
+\label{sec:uploadFiltersXAI}
+
+As mentioned in \hyperref[sec:directiveCopyrightUploadFilters]{the introduction to the Directive on EU Copyright and Upload Filters (\ref{sec:directiveCopyrightUploadFilters})}, a \gls{mla}, used to detect copyright infringements would be too complex. Joel Dudley, director of the Institute for Next-Generation Healthcare at the Ichan School of Medicine, said: "We can build these models, but we don't know how they work." \cite{Knight2019}. His statement was part of an interview with the journalist Will Knight from MIT's Technology Review about Explainable Artificial Intelligence (XAI). A precise definition of what exactly \gls{xai} is does not exist. The global idea is that we use a \gls{mla}to make decisions which must be in natural language. For example, if we use an image as an input for a \gls{mla}, the task would be to label the images with a label for cancer or no cancer. A doctor who wants to use this information could be interested in the question of why the algorithm, predicts a cretin label for this image. \cite{SamekWojciech2017}.\\
+
+Apart from the Technology Review, newspapers like The New York Times, Financial Times and The Register have also reported that an \gls{xai} is necessary an \gls{mla} is used for an automatic decision making \cite{Kuang2017} \cite{Robinson2017} \cite{Waters2017}. David Gunning explains in his research project about \gls{xai} that \gls{ml} can bring a huge benefit to the transportation sector, as well as to the finance , security , legal , medicine and military sector. Gunning claims that algorithms are limited, because they can not explain their actions and decisions to users in an understandable way. He assumes \gls{xai} will be essential if users want to understand, trust, and effectively manage this incoming new \gls{ml} Algorithms\cite{Gunning2019}. Figure \ref{fig:01_upload_filiter_example} shows an example of how transparent \gls{ul} can be applied to uploaded images. Even this look not intuitive for a non-technical user, if we build an \gls{ul} with \gls{dl} methods, it has to be an \gls{xai} \cite{WaltermannHubertus2019}. Otherwise, there will be no explanation of how the decision from an \gls{ul} was made.\\
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[width=0.9\linewidth]{photo/01_upload_filiter_example.png}
+	\caption{Example of how transparent \gls{ul} can be applied to uploaded images \cite{Visualiz76:online}}
+	\label{fig:01_upload_filiter_example}
+\end{figure}
+
+\section{The Goal of this Thesis}
+\label{sec:goal}
+
+Even automatic image recognition in \gls{xai} with \gls{dl} procedures is just a research topic, it is important to evaluate how we could generate comprehensible decisions (XAI). So, the main objective is to find an answer to the following question:
+\begin{quote}\textit{"How can automatic image recognition be implemented in such a way that the resulting decisions are transparent?"} \end{quote}
+For this purpose, I would like to develop an algorithm which should be able to recognize patterns on images (automatic image recognition) automatically. If a pattern is recognized by the algorithm, it should assign a label to the image.  In the pre-field, I define which markings correspond to appropriate content and which to inappropriate content. This way, the algorithm should finally decide which images are appropriate or inappropriate according to the criteria I defined before (\gls{ul}).
+
+Afterwards, the results of the algorithm are presented in such a way that the decisions become transparent (\gls{xai}). What transparent actually means is hard to tell at this point of my thesis, because it depends on the algorithms and techniques, which are used to implement the filter. Anyway to make things more clear, transparent could explained as the following:
+
+\begin{quote}
+\textit{Imagine a social media platform like Instagram, where everybody could share its images. If someone shares an image and it is getting blocked by a filter (e.g. because of copyright violation), the user should be able to understand why the decision would be made. There could be an automatically generated text, which says that the algorithm had detected a copyright issue and it highlights specific parts in the blocked image. The highlighted details should tell the user why the algorithm came to decision (content is protected by copyright law).
+}
+
+\end{quote}
+
+In contrast to my example, an application in real life would be much more complicated. First, in such a real-world application, there is a much more extensive range of labels that the algorithm could set. Second, it is not only possible to upload images, but also text and sound which would have to be checked. Therefore my example application is only a prototype. Anyway, the question is asked on top of this section will be answered anyways. At least from a theoretical perspective. In the end, I would like to use my prototype to transfer the knowledge gained to a more general scenario.
+
+\section{Thesis Structure}
+\label{sec:structure}
+
+A brief \hyperref[ch:Introduction]{Introduction (\ref{ch:Introduction})} about the two main terms \gls{ul} and \gls{xai} is already addressed in the previous introduction section. Preface I and II is about the motivation for this thesis and about the prior knowledge which in order to work on this task. The \hyperref[ch:theory]{"Requirement Chapter"(\ref{ch:theory}} focuses on details which are necessary to answer the question which is given at \hyperref[sec:goal]{the Goal of this Thesis (\ref{sec:goal})}. The \hyperref[ch:requirements]{"Requirements"(\ref{ch:requirements}} section defines properties and demands of a \gls{ul} prototype which makes transparent decisions with the help of \gls{dl} and \gls{xai} methods. The next two chapters (\hyperref[ch:functional_specifications]{introduction (\ref{ch:functional_specifications})},(\hyperref[ch:it_specifications]{introduction (\ref{ch:it_specifications})}, are presenting an analytical approach o how such a prototype can be implemented. The next chapters are applying the answers to a broader use case scenario like described in section \hyperref[sec:goal]{"The Goal of this Thesis" (\ref{sec:goal})}. It starts with an evaluation followed by a generalization and ends with a summary. Before the work on this thesis has actually started, to finish a structured plan in the methodological table (Figure \ref{fig:02_methodological_table}.) was mandatory. Here it is presented in a translated and shortened version. Here can be seen a detailed explanation of the thesis structure. 
+
+\begin{figure}[htp]
+\centering
+    \includegraphics[max size={\textheight}{\textwidth},angle=90]{photo/02_methodological_table.pdf}%<---angle here
+    \caption{Methodological table  which was prepared in the run-up to the bachelor thesis in cooperation with the assesor Dr Prof Alfred Holl.}
+    \label{fig:02_methodological_table}
+\end{figure}
+
+\section{Related Work}
+
+Katharina Blandina Weitz wrote in her master thesis "Applying Explainable Artificial Intelligence for Deep Learning Networks to Decode Facial Expressions of Pain and Emotions" about programmes used in hospitals, which detect pain in facial expressions. According to her, this software should use deep learning to support human practitioners. Towards her thesis, Ms Weitz found out that these deep learning methods work well in recognising pain in human facial expressions, but they are hard to interpret. From her abstract, you can learn that XAI does not depend on a specific data set that was used to perform a machine learning task. Rather, according to their statement, the methods can be applied to any dataset that was previously used for a task that was processed by deep learning \cite{Weitz2018}. As described in \hyperref[sec:goal]{the Goal of this Thesis (\ref{sec:goal})} the contexted will be changed among this thesis.\\
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{photo/03_DARPA_XAI_Project.png}
+	\caption{Explainable Artificial Intelligence Concept from the Defense Advanced Research Projects Agency \cite{Robinson2017}}
+	\label{fig:03_DARPA_XAI_Project}
+\end{figure}
+
+The Defence Advanced Research Projects Agency (DARPA)is an agency of the United States Department of Defence. They focus on the development of emerging technologies that the military could use. Because both the number of applications and the complexity of \gls{ml} models have increased, a project has been started to specialize in \gls{xai}. It aims for more transparent models while maintaining a high level of prediction accuracy. Furthermore, the program wants to enable human users to understand, appropriately trust, effectively manage the output a \gls{mla} \cite{Robinson2017}. Figure \ref{fig:03_DARPA_XAI_Project} shows how the Defense Advanced Research Projects Agency presents its projects as a concept. As I have also described in \hyperref[sec:goal]{the Goal of this Thesis (\ref{sec:goal})}, the concept wants to move away from a model that human users cannot understand towards to a more transparent model. 
+
+There are more scientific papers on \glossary{xai}, but a complete bibliography is unfortunately not possible within this work.\\

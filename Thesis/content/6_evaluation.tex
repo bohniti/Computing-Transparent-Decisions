@@ -1,0 +1,46 @@
+% !TeX spellcheck = en_GB
+% !TeX encoding = UTF-8
+
+\chapter{Evaluation}
+\label{ch:summary}
+\epigraph{"Small daily improvements over time lead to stunning results?"}{- Robin Sharma}
+
+Discussion and evaluation of accuracy are not useful since it focuses on \gls{xai}. Nevertheless, the train and test curves of the accuracy are documented in Figure \ref{fig:leaning_courves} to give the reader a complete overview of the model. It can be seen that even the results are nor outstanding or state of the art among all the classifier it does a good job. It shall be mentioned that if a model does "a good job" or not is mostly seen from a personal perspective. Furthermore, the field in which the algorithm should be sued is important. So, whereas in prediction Cat and Dogs for fun, 97\% of accuracy looks good enough. As mentioned in the Introduction, use within an Upload filter can be critical. Especially since that 3\% can be still a lot. Let us take Instagram, for example. Assume that this or a similar classifier is used as an upload filter. Millions of people and thousands on Bussines realize on the Instagram Application. So, if the classifier makes 3\% false decisions, this can harm many people. Maybe it is not as worse for private use, but since busies models are built on top of this application, it is critical.
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.85\linewidth]{photo/39_learning_courves}}
+	\caption{Line Plots of Loss and Accuracy Learning Curves for the Dogs and Cats Dataset (VGG16-Architecture)}
+	\label{fig:leaning_courves}
+\end{figure}
+
+As mentioned in the Expected Gradient Approach section, classical approaches as the shapely-values lead to results which are hard to interpret. Even an interpretation is a qualitative basis, and for a user with a deeper technical understanding, those values can mean something Figure \ref{fig:shapley_values_on_dogs} shoes how noisy those values are. 
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.85\linewidth]{photo/40_orginal_shapley_values.png}}
+	\caption{Shapley Values }
+	\label{fig:shapley_values_on_dogs}
+\end{figure}
+
+This becomes even more clear in comparison with images from the same distribution which uses the Expected Gradient Approach instead of pure shapely values\\\\
+
+In Figure \ref{fig:expected_gradients_7}, the expected gradient values from the 7th layer of the VGG-16 CNN Model can be seen. Here it is more likely to get a conclusion of what features are essential. A possible outcome is that the pixels which show a cat or a dog are more critical to the prediction. So, far so good. But since the objective is to use this approach as an upload filter to help people to overthink their decisions, this is not enough.\\
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.6\linewidth]{photo/41_expected_gradients_layer_7}}
+	\caption{Shapley Values }
+	\label{fig:expected_gradients_7}
+\end{figure}
+
+Another approach can be seen in Figure \ref{fig:expected_gradients_14}. Here the 14th layers gradients are calculated and visualized. No, a few specific cafeterias stand out from the visualization. Especially the regions around the nose and the ears seems as important for the algorithms. This interpretation came from the fact that these regions are red. It stands for a higher value and stands therefore for higher importance. 
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.6\linewidth]{photo/42_expected_gradients_layer_14}}
+	\caption{Shapley Values }
+	\label{fig:expected_gradients_14}
+\end{figure}
+
+At the very end of the \hyperref[ch:theory]{Theory (\ref{ch:theory})} Chapter an intuitive way of how Shapley values can be interpreted was given. So, now this intuition will be used to interred the values. For a better understanding compare this interpretation with the explains in the  \hyperref[ch:theory]{Theory (\ref{ch:theory})} Chapter. The metaphorical the pixels were replaced by chefs in a kitchen. Every chef enters the kitchen randomly such that different constellations of the chef are in the kitchen. Average increase/ decrease in the grading of meal which got prepared before and after a chef is entering the kitchen is the Shapley value. So, the overall grade would be higher if the chef (pixels) around the nose are in the kitchen. Note that this is not an absolute value (Is in or Is not in the kitchen). Moreover, the other chef, who is in the kitchen in different combinations is crucial since this is an average value. 

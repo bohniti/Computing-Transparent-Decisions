@@ -1,0 +1,88 @@
+% !TeX spellcheck = en_GB
+% !TeX encoding = UTF-8
+
+\chapter{Requirements}\label{ch:requirements}
+\epigraph{"Big shots are only little shots who keep shooting."}{- Christopher Morley}
+
+Explainability is the primary cause of this thesis, and until now, the development of explainable deep neural networks has been considered as a theoretical issue \hyperref[ch:theory]{(Chapter \ref{ch:theory})}. Within the next few chapters, a prototype is set to become an essential part, when it comes to transform this academic issue into a real-world problem. 
+
+The previous chapters focused on systematic literature research around the following topics:  
+\begin{itemize}
+	\item Supervised Machine Learning \hyperref[sec:supervised_learning]{(Section \ref{sec:supervised_learning})}
+	\item Deep Learning \hyperref[subsec:deep_learning]{(Section \ref{subsec:deep_learning})}
+	\item Convolutional Neural Networks \hyperref[subsec:cnn]{(section \ref{subsec:cnn})}
+	\item Explainable Artificial Intelligence \hyperref[subsec:expected_gradient_approach]{ (Section \ref{subsec:expected_gradient_approach})}
+\end{itemize}
+
+Therefore my prototype has to be an implementation of a supervised machine learning algorithm. More precisely a deep neural network of a convolutional architecture. Moreover, the implementation of the prototype has to present the results clearly and transparently. If the prototype can not do this, an application will not help to apply the given knowledge into practice. This Section can be seen as a preliminary explanation of what a prototype has to accomplish. So, the requirements can be discussed in more detail. 
+
+\section{Objective}
+
+The prototypes objective is to make predictions on a given input and present these predictions (output) transparently. The details of what input, output and transparency mean will be described in the following sections.
+
+\section{Input Data}
+
+In her cutting edge master thesis, Katarina Blandina Weitz presented a prototype to decode facial expressions of pain and emotions. For example, images of human's emotions as input were notably valuable. In order to identify the worth of explainable deep learning methods in upload filters, the subject does not matter. Besides, a limitation of a specific subject (e.g. human's emotions) is to use the results for a generalization. This thesis uses a variation of Weitz input. In fact, the subject of the images will change, but the specifications are similar. This means the prototypes input consist of photographs which show a random subject except for human expressions. As given in the preliminary explanation above, the prototype uses deep learning with a convolutional architecture. I have already mentioned the technical detail of input data in the theory part of convolutional neural networks \hyperref[subsec:cnn]{(Section \ref{subsec:cnn})}. Within this chapter, the Definition \ref{def:structure_for_linear_logistic_regression} specified the input data when it comes to training a machine learning algorithm as 
+
+\begin{quote}
+	\textit{a vector with probabilities for each image which gots predicted. Every probability stands for the likelihood to belong to a specific class.}
+\end{quote}
+
+In addition to \hyperref[def:structure_for_linear_logistic_regressionn]{Definition \ref{def:structure_for_linear_logistic_regression}}, another input has to be defined. The objective of the prototype is to make predictions. Some information has to be given, to enable an algorithm to do this. The need of a second input was also explained in before \hyperref[ch:theory]{(Chapter \ref{ch:theory})}, as the concept of training and test data was introduced.
+
+A problem with input data is the computation time. In a nutshell, if more data and classes are given, the computation time increases exponentially. So, it makes sense to keep the input dataset and its possible outcomes as small as possible. This relation is explained in \hyperref[ch:theory]{Chapter \ref{ch:theory})}. As a summary, the prototypes input data will fulfil the following requirements:
+
+\begin{itemize}
+	\item A dataset which can be divided into a training and test set
+	\item A dataset which consists of images with any subject except for human facial expressions
+	\item The size of the input dataset shall not be too big, otherwise it can not be trained on a personal computer 
+\end{itemize}
+
+\section{Data processing}
+
+As mentioned in the introduction of this chapter, the prototype is useful to turn the theory into applied knowledge. The prototype exploits the introduced methods to make predictions on unseen data (test data), in particular convolutional neural networks. The principal characteristic of the prototype is its transparency, which will be achieved by using Shapley values and the integrated gradient. So, the required process looks as follows:
+
+\begin{enumerate}
+\item The images (input) will be loaded
+\item The input must be divided into a training and test set
+\item Parameters of a convolutional neural network got trained while using the test set
+\item The model will be evaluated during the test set
+\item A few examples of the test set are used to show a transparent decision 
+\end{enumerate}
+
+This process is required to implement my prototype successfully. Figure \ref{fig:45_Requirements_process} visualizes the processes within a circle. It means that the processes can be repeated several times, as long as the output fulfils the required form. The symbols above each step shall provide a better understanding of the process. For example, step four aims for a high accuracy. In other words, it is import that the prediction hits the right label of the image. It can be illustrated with an arrow that is supposed to hit a target. The requirements of step five, on the other hand, are less clear. It is expected that results are transparent but everyone can have a unique understanding of what transparency means. For example, in the eyes of non-technical user, transparency is something different, compared to technical user. So, this step is visualized through an eye. 
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/45_Requirements_process}}
+	\caption{The Figure shows the required process of my prototype. Every symbol visualizes the main objective and the focus of each step.  Step five points out that it is expected that the results are transparent. Everyone has a unique understanding of what transparency means. For example, in the eyes of non-technical users, transparency is different, compared to technical users. So, this step is visualized through an eye. }
+	\label{fig:45_Requirements_process}
+\end{figure}
+
+\section{Output Data}
+
+The predictions were made as part of an explainable deep learning model. A classifier to make predictions on unseen data (step four of the previous section), is the first step along the road to transparent decisions. This step of making predictions on unseen data has already been achieved through the use of a convolutional neural network. How this works in general, is also described in \hyperref[subsec:cnn]{Section \ref{subsec:cnn}}. It defines the output as follows:
+
+\begin{quote}
+	\textit{A vector with probabilities for each image which gots predicted. Every probability stands for the likelihood to belong to a specific class.}
+\end{quote}
+
+Transparency is a crucial aspect of the prototype. That is why everything that explains how the algorithm came to the probabilities will be seen as a second output. The best method for this investigation is to use the expected gradient approach. Understanding the output of this method is absolutely crucial if it comes to make transparent decisions. An intuitive way to understand the output of the expected gradient approach is the following illustration: 
+
+\begin{quote}
+	\textit{The input values enter a room in random order. All input values in the room contribute to the final prediction. The Shapley value of a feature value is the average change in the prediction that the coalition which is already in the room receives, when the feature value joins them.}
+\end{quote}
+
+Nevertheless, this intuition is not appropriate for people without an information technology background. For those people it is beneficial to visualize these values on the given input. This leads to the following requirements:
+
+\begin{enumerate}
+\item The prototype returns a prediction for each image in the test data set 
+\item The prototype returns additional values for a subset of the predictions. More precisely, a value is mapped to each input variable of the examined image. This mapping reflects its contribution to the overall result
+\item The final output is an image. Therefore the output of Step 2 gets projected on the examined image. The pixels in the image should be colored in such a way that it is clearly visible how valuable the surrounding image area was for a prediction.
+\end{enumerate}
+
+\section{Evaluation}
+
+Transparency is a qualitative value. Therefore it is hard to evaluate the results. Instead, it is possible to make assumptions about how transparent and clear the results are. But without a well-designed survey, such an unjustified assumption can lead to wrong findings and a false conclusion. To avoid this scenario, only the output as explained before gets evaluated. If the output is equal to this explanation, the transparency will be regarded as useful.\\
+
+Nevertheless, there is also a quantifiable characteristic that has to be evaluated. If the accuracy \hyperref[sec:supervised_learning]{(Section \ref{sec:supervised_learning})} on the test set is below 90\% the prototype will not be useful for making predictions. Instead, the expected gradient approach can be used to investigate why the classifier fails. 

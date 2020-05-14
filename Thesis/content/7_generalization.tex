@@ -1,0 +1,23 @@
+% !TeX spellcheck = en_GB
+% !TeX encoding = UTF-8
+
+\chapter{Generalization}
+\label{ch:generalization}
+\epigraph{"The big picture doesn't just come from distance; it also comes from time."}{- Simon Sinek}
+
+Now it is time to summarize the current results and insights from the theory chapter and the chapter around the prototype to get an idea if it is possible to use AI as a transparent Upload Filter.\\
+
+I think no matter what companies say, \gls{ai} can not replace humans in their role of a moderator for online contend. Most companies use a combination of automatic systems and human resources to check the content from users. Even the first part (automated systems) can be replaced by deep learning algorithms to make a forecast of which content humans should observe. First, it still is up to human employees to check uploaded content. The next few insights from this thesis are the main reasons this is true.
+
+\begin{itemize}
+	\item Even the results in usual image recognition are outstanding have a high accuracy (> 95\%) the expiations make this technology an easy target for special cases. It can harm many users while running their business on social Networks.
+	\item The hardware resources which were needed to train those results are huge. This leads to the fact that if a real-world application wants to cover every single class, there must be tremendous resources. In a Nutshell, it costs a lot, and human resources are cheaper in most cases. Especially since outsourcing is pretty easy because a high-speed internet connection is available in almost every single country.
+	\item Even the results from the prototype have shown that it is possible to make deep learning models more transparent it still costs a lot of effort to describe its interpretation.
+\end{itemize}
+
+If we got back to the start-up company which got introduced as a use-case scenario, the team would maybe conclude that the technique is too expensive to use it as a complete replacement. Even more than the method is still a topic which needs final research to make interpretation more useful.\\
+
+Instead, the company could think of an implementation which uses deep learning to help with moderation. For example, pushing suspect content (as cats which got uploaded to the platform) to a human moderator. Even more, if real-world examples would replace the use-case scenario a classifier which sends every image which could show offensive content (guns, nudity) to a moderator can save a tremendous amount of time and effort.\\
+
+But what has all this to do with \gls{xai}? Let's take the example of a cat image which looks very close to a dog or vice versa. Then it can help to give the moderator a hint what the machine learning model has thought. Or better on what feature it had a closer look before it decides for or against to assign a label to an image.\\
+
