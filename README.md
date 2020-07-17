@@ -7,14 +7,15 @@
 
 ## Motivation
 
-/
+Machine Learning has grown large in both research and industrial applications, especially with the success of deep learning and so-called neural networks, so extensive that its impact and possible after-effects are unpredictable. Interpretability, explainability and transparency of machine learning algorithms have thus become pressing issues. For this reason, I started to gain intrinsic motivation about machine learning, deep learning and explainable artificial intelligence.
+I first came into contact with Data Science through an IT project. I modified a remote- controlled car so that it was possible to control it with a Raspberry Pi. The final step was to implement a neural network for autonomously driving. The whole project was very challenging. But I had a lot of fun, and my passion was awakened. My knowledge and motivation were immediately tested in Hong Kong, while I focused on machine learning during my semester abroad. The mathematical theorems that were expected to be solved were genuine hurdle because of my gaps in mathematics. Tanks to the enormous effort, however, I achieved huge breakthroughs, was able to close the gaps, master the tasks and finally shine at the practical programming part.
+This experience strengthened my wish to specialize further in this direction. Throughout this thesis, I will question the oft-made assertions that linear models are transparent and that deep neural networks are not. I think this is important since there is a lot of ambiguity when it comes to the use of deep learning methods within upload filters.
 
 ## Content
 
-- Code as [iPython](hhttps://github.com/bohniti/computing_transparent_decisions/blob/master/Code/Notebooks/Bachelor_Thesis_Text_Generation.ipynb) 
-- Code as [.py](https://github.com/bohniti/computing_transparent_decisions/blob/master/Code/Source)
-- Thesis as [PDF](https://github.com/bohniti/computing_transparent_decisions/blob/master/Thesis/thesis.pdf)
-- Presentation as [PDF](https://github.com/bohniti/computing_transparent_decisions/blob/master/Presentation/presentaion.pdf)
+- Code as [iPython](https://github.com/bohniti/computing_transparent_decisions/blob/master/Code/Notebooks/transparent-image-recognition%40timo-bohnstedt.ipynb) 
+- Thesis as [PDF](https://github.com/bohniti/computing_transparent_decisions/blob/master/Thesis/Automatic-image-recognition-in-upload%20filters-thesis%40timo-bohnstedt.pdf)
+- Presentation as [PDF](https://github.com/bohniti/computing_transparent_decisions/blob/master/Thesis/Automatic-image-recognition-in-upload%20filters-presentation%40timo-bohnstedt.pdf)
 
 ## How do I get the code?
 
