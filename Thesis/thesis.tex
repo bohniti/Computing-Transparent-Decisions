@@ -164,7 +164,7 @@ number within=section]{definition}[2][]{
 \usepackage{pythonhighlight}
 %\usepackage{python}
 
-\makeglossaries
+%\makeglossaries
 %Glossary
 \begin{document}
 \setcounter{secnumdepth}{3}  % numerate subsections
@@ -187,9 +187,8 @@ number within=section]{definition}[2][]{
 \include{content/6_evaluation}
 \include{content/7_generalization}
 \include{content/8_conclusion}
-% remove if not needed
-%\appendix
-%\include{content/a1_supplemental}
+\appendix
+\include{content/a1_supplemental}
 
 \backmatter
 \listoffigures
@@ -203,5 +202,5 @@ number within=section]{definition}[2][]{
 \bibliographystyle{apalike}
 \bibliography{refs}
 \listofdefinitions
-\printglossaries
+%\printglossaries
 \end{document}

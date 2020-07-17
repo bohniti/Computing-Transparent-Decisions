@@ -5,42 +5,86 @@
 \label{ch:summary}
 \epigraph{"Small daily improvements over time lead to stunning results?"}{- Robin Sharma}
 
-Discussion and evaluation of accuracy are not useful since it focuses on \gls{xai}. Nevertheless, the train and test curves of the accuracy are documented in Figure \ref{fig:leaning_courves} to give the reader a complete overview of the model. It can be seen that even the results are nor outstanding or state of the art among all the classifier it does a good job. It shall be mentioned that if a model does "a good job" or not is mostly seen from a personal perspective. Furthermore, the field in which the algorithm should be sued is important. So, whereas in prediction Cat and Dogs for fun, 97\% of accuracy looks good enough. As mentioned in the Introduction, use within an Upload filter can be critical. Especially since that 3\% can be still a lot. Let us take Instagram, for example. Assume that this or a similar classifier is used as an upload filter. Millions of people and thousands on Bussines realize on the Instagram Application. So, if the classifier makes 3\% false decisions, this can harm many people. Maybe it is not as worse for private use, but since busies models are built on top of this application, it is critical.
+The evaluation goes through the points which are mentioned in the requirements chapter (Chapter \ref{ch:requirements}):
+\begin{enumerate}
+\item The Prototypes ability to successfully recognize cats and dogs  (greater than 90\% accuracy on unseen images)
+\item The Prototypes ability to calculate SHAP values 
+\item The Prototypes ability to visualize these values on the images which are successfully  recognized by the model.
+\end{enumerate}
+
+Even more, it was mentioned that the second and third ability is hard to evaluate because these abilities are qualitative capabilities. This is why these requirements can have just to status:  Fulfilled or not fulfilled without concerning the levels of fulfilment.
+
+\section{Ability to predict}
+
+As in Figure \ref{fig:51_Requirements_process_libs} can be seen that the prototype can be evolved within an iterative processes. The visualization in Figure \ref{fig:fig:acc-simple-mode.png} visualizes the result of a very simple convolutional neural network. The visualization shows  characteristics of overfitting. The training accuracy increases linearly over time, until it reaches nearly 100\%, while the validation accuracy is at 70-72\%. The validation loss reaches its minimum after only five epochs, then it does not change anymore, while the training loss keeps decreasing until it reaches nearly zero.
 
 \begin{figure}[htp]
 	\centering
-	\fbox{\includegraphics[width=0.85\linewidth]{photo/39_learning_courves}}
-	\caption{Line Plots of Loss and Accuracy Learning Curves for the Dogs and Cats Dataset (VGG16-Architecture)}
-	\label{fig:leaning_courves}
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/acc-simple-mode.png}}
+	\caption{The visualization shows  characteristics of overfitting. The training accuracy increases linearly over time, until it reaches nearly 100\%, while the validation accuracy is at 70-72\%. The validation loss reaches its minimum after only five epochs, then it does not change anymore, while the training loss keeps decreasing until it reaches nearly zero}
+	\label{fig:acc-simple-mode.png}
 \end{figure}
 
-As mentioned in the Expected Gradient Approach section, classical approaches as the shapely-values lead to results which are hard to interpret. Even an interpretation is a qualitative basis, and for a user with a deeper technical understanding, those values can mean something Figure \ref{fig:shapley_values_on_dogs} shoes how noisy those values are. 
+This is characteristic for so-called overfitting which was described in the section about convolutional neural networks. 
+
+Within the next step, the requirement form over 90\% will be achieved. With the help of a pre-trained model, the variance bias trade was optimized as can be seen in Figure 11.
 
 \begin{figure}[htp]
 	\centering
-	\fbox{\includegraphics[width=0.85\linewidth]{photo/40_orginal_shapley_values.png}}
-	\caption{Shapley Values }
-	\label{fig:shapley_values_on_dogs}
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/acc-pre-trainied.png}}
+	\caption{The visualization shows how with the help of a pre-trained model, the variance bias trade was optimized.}
+	\label{fig:acc-simple-mode.png}
 \end{figure}
 
-This becomes even more clear in comparison with images from the same distribution which uses the Expected Gradient Approach instead of pure shapely values\\\\
+\section{Ability to calculate SHAP values}
 
-In Figure \ref{fig:expected_gradients_7}, the expected gradient values from the 7th layer of the VGG-16 CNN Model can be seen. Here it is more likely to get a conclusion of what features are essential. A possible outcome is that the pixels which show a cat or a dog are more critical to the prediction. So, far so good. But since the objective is to use this approach as an upload filter to help people to overthink their decisions, this is not enough.\\
+As described in the IT-Concept, the calculation of the SHAP is done by the SHAP library. The function form the SHAP library uses three things form the prototypes implementation:
 
-\begin{figure}[htp]
-	\centering
-	\fbox{\includegraphics[width=0.6\linewidth]{photo/41_expected_gradients_layer_7}}
-	\caption{Shapley Values }
-	\label{fig:expected_gradients_7}
-\end{figure}
+\begin{enumerate}
+\item the deep learning model (model),
+\item a subset of the test set (to\_explain)
+\item two batches to predicted labels (X).
+\end{enumerate}
 
-Another approach can be seen in Figure \ref{fig:expected_gradients_14}. Here the 14th layers gradients are calculated and visualized. No, a few specific cafeterias stand out from the visualization. Especially the regions around the nose and the ears seems as important for the algorithms. This interpretation came from the fact that these regions are red. It stands for a higher value and stands therefore for higher importance. 
+The model is used to get the inputs and outputs of the defined layers. For the example of the prototype, it uses the following layers to get the SHAP values:
 
-\begin{figure}[htp]
-	\centering
-	\fbox{\includegraphics[width=0.6\linewidth]{photo/42_expected_gradients_layer_14}}
-	\caption{Shapley Values }
-	\label{fig:expected_gradients_14}
-\end{figure}
+\begin{itemize}
+\item The 7th 
+\item The 14th 
+\end{itemize}
 
-At the very end of the \hyperref[ch:theory]{Theory (\ref{ch:theory})} Chapter an intuitive way of how Shapley values can be interpreted was given. So, now this intuition will be used to interred the values. For a better understanding compare this interpretation with the explains in the  \hyperref[ch:theory]{Theory (\ref{ch:theory})} Chapter. The metaphorical the pixels were replaced by chefs in a kitchen. Every chef enters the kitchen randomly such that different constellations of the chef are in the kitchen. Average increase/ decrease in the grading of meal which got prepared before and after a chef is entering the kitchen is the Shapley value. So, the overall grade would be higher if the chef (pixels) around the nose are in the kitchen. Note that this is not an absolute value (Is in or Is not in the kitchen). Moreover, the other chef, who is in the kitchen in different combinations is crucial since this is an average value. 
+The following listing shows how the calculation is implemented, with the help of the SHAP library:
+
+\begin{python}[label={pred}, caption={Predictions of the pre-trained VGG-16 Architecture CNN model}]
+e = shap.GradientExplainer(
+(model.layers[2].input, model.layers[-1].output), map2layer(X, 2),)
+shap_values,indexes = e.shap_values(map2layer(toExplain,2),rankedOutputs=1)
+
+# get the names for the classes
+index_names = np.vectorize(lambda x: class_names[str(x)][1])(indexes)
+
+# plot the explanations
+shap.image_plot(shap_values, to_explain, index_names)
+\end{python}
+
+How this is done is partly described in the corresponding SHAP section. But as a brief reminder:
+
+\begin{quote}
+	\textit{What it does it, it uses two batches as another training set and simulates a training for which it estimates the SHAP values of the subset. A more detailed explanation can not be given because of its complexity. It can fill another thesis with ease.}
+\end{quote}
+
+So, the prototype fulfils actually two out of the three defined requirements. First, the implementation recognizes cats and dogs on unseen images with an accuracy of over 90\%. Second, it calculates SHAP values for every model in the implementation.
+
+\section{Ability to visualize SHAP values}
+
+The function which is described in the IT-Specifications can visualize the SHAP values on top on images. Figure \ref{fig:41_expected_gradients_layer_7} shows how this looks for the 7th layer of the prototypes model. The intuition about it is:
+
+\begin{quote}
+\textit{The visualization put another layer on an image which was recognized from the prototype. It shows the labels and it highlights important parts of the images red. In this case important means important with respect to the absence of other parts in the image as described in the theory chapter (Chapter \ref{ch:theory})}
+\end{quote} 
+
+Finally, the prototype fulfils every requirement which is defined in the Requirements (Chapter \ref{ch:requirements}). This means it can recognize cats and dogs, calculate SHAP values and visualizes them to make the decisions more transparent.  
+
+\section{Evaluation of the implementation process}
+
+Even though it was not mentioned before the implementation process shall be evaluated as well, to ensure the reader is not wondering why the append code differs from the IT-Concept. The implementation is slightly different, as described in the IT-Specification because the SHAP, TensorFlow Datasets and the TensorFlow libraries had some major changes while the prototype was implemented. This leads to a couple of problems when it comes to the implementation. For the evaluation this means the IT-Specification was unsuccessful. Nevertheless, to present a result which can be evaluated, the implementation was changed. For example, the prototype works know with the original dataset from the website kaggl.com. The changes are not presented in the process because the basic structure is still the same. So, the reader shall be able to understand and run the append code anyways. 

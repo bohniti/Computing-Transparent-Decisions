@@ -1,6 +1,8 @@
-\contentsline {tcolorbox}{\bfseries 2.2.1~Mapping Function}{11}{tcb@cnt@definition.2.2.1}% 
-\contentsline {tcolorbox}{\bfseries 2.2.2~required input format for a machine learning program with logical regression}{12}{tcb@cnt@definition.2.2.2}% 
-\contentsline {tcolorbox}{\bfseries 2.2.3~A Linear Function as a vector and matrix representation to compute multiple input values at once}{14}{tcb@cnt@definition.2.2.3}% 
-\contentsline {tcolorbox}{\bfseries 2.2.4~Sigmoid Function e.g. for using it to get probabilities}{14}{tcb@cnt@definition.2.2.4}% 
-\contentsline {tcolorbox}{\bfseries 2.2.5~Cost Function which can be optimized}{15}{tcb@cnt@definition.2.2.5}% 
-\contentsline {tcolorbox}{\bfseries 2.2.6~Calculate the total number of neurons in a neuronal network}{20}{tcb@cnt@definition.2.2.6}% 
+\contentsline {tcolorbox}{\bfseries 2.2.1~Mapping Function}{12}{tcb@cnt@definition.2.2.1}% 
+\contentsline {tcolorbox}{\bfseries 2.2.2~required input format for a machine learning program with logical regression}{13}{tcb@cnt@definition.2.2.2}% 
+\contentsline {tcolorbox}{\bfseries 2.2.3~A Linear Function as a vector and matrix representation to compute multiple input values at once}{15}{tcb@cnt@definition.2.2.3}% 
+\contentsline {tcolorbox}{\bfseries 2.2.4~Sigmoid Function e.g. for using it to get probabilities}{15}{tcb@cnt@definition.2.2.4}% 
+\contentsline {tcolorbox}{\bfseries 2.2.5~Cost Function which can be optimized}{16}{tcb@cnt@definition.2.2.5}% 
+\contentsline {tcolorbox}{\bfseries 2.2.6~Cost Function which can be optimized}{17}{tcb@cnt@definition.2.2.6}% 
+\contentsline {tcolorbox}{\bfseries 2.2.7~Cost Function which can be optimized}{19}{tcb@cnt@definition.2.2.7}% 
+\contentsline {tcolorbox}{\bfseries 2.2.8~Calculate the total number of neurons in a neuronal network}{20}{tcb@cnt@definition.2.2.8}% 

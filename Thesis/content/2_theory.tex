@@ -4,238 +4,218 @@
 \label{ch:theory}
 \epigraph{"Math is like water. It has a lot of difficult theories, of course, but its basic logic is very simple."}{- Haruki Murakami, IQ84}
 
-This chapter is a summary of all fundamental aspects of \gls{ml}. More specifically, the crucial elements for an understanding of the prototype-functionality, which is presented later on. First of all, the historical development of \gls{ml} will be covered briefly. As soon as the reader has an understanding of the historical development of \gls{ml}, its categories will be discussed. Therefore, not every detail is covered. Only aspects and algorithms of \gls{ml} which are relevant in order to talk about the topic of this thesis. In the final part of this chapter, two different approaches of \gls{xai} are introduced. Furthermore, a specific kind 
-\gls{xai} implementation is mentioned, such that the reader can understand how predictions can be made transparent.
+This chapter is a summary of all the fundamental aspects of machine learning. More specifically, the crucial elements for an understanding of the prototype-functionality. First of all, the historical development of machine learning will be covered briefly. As soon as the reader has an understanding of the historical development of machine learning aspects and algorithms of machine learning, which are relevant to talk about the topic of this thesis are discussed. In the final part of this chapter, two different approaches of explainable artificial intelligence are introduced. Furthermore, a specific kind 
+explainable artificial intelligence is mentioned, such that the reader can understand how predictions can become transparent.
 
 \section{History of Machine Learning}
 \label{sec:history}
 
-An example of \Gls{ml} would be to take a lot of images and try to recognize cats (patterns) on them. The \Gls{mla} would be able to predict - for new images in the future - whether it is a cat or not. In this example, \gls{ml} can be seen as
+An example of machine learning is to take a lot of images and try to recognize cats (patterns) on them. The machine learning algorithm would be able to predict whether it is a cat or not. In this example, machine learning can be seen as
 
-\begin{quote}\textit{"[...] a set of methods which can automatically detect patterns in data, and then use the uncovered patterns to predict future data or to perform other kinds of decision making under uncertainty" \cite[p. 1]{Murphy2012}.} \end{quote}
+\begin{quote}\textit{"[...] a set of methods which can automatically detect patterns in data, and then use the uncovered patterns to predict unseen data or to perform other kinds of decision making under uncertainty" \cite[p. 1]{Murphy2012}.} \end{quote}
 
-But there is more than one definition which describes \gls{ml}. Arthur Samuel was the first researcher who used this term and defined it as "Machine Learning is a field of study that gives computers the ability to learn without being explicitly programmed" \cite{Samuel1959SomeSI}. The computer scientist Mitchel provided a more formal definition of \gls{ml}, which is quoted in hundreds of papers\footnote{998 results on google scholar while searching for the original meaning from Mitchel (date: 24 Jan 2020)}. In his book from 1997, he says "A computer program is said to learn from experience E concerning some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E" \cite{Mitchell97}.\\
+But there is more than one definition which describes machine learning. Arthur Samuel was the first researcher who used this term and defined it as "Machine Learning is a field of study that gives computers the ability to learn without being explicitly programmed" \cite{Samuel1959SomeSI}. The computer scientist Mitchel provided a more formal definition of machine learning, which is quoted in hundreds of papers\footnote{998 results on google scholar while searching for the original meaning from Mitchel (date: 24 Jan 2020)}. In his book from 1997, he says "A computer program is said to learn from experience E concerning some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E" \cite{Mitchell97}.\\
 
 \begin{figure}[!htp]
 	\centering
 	\fbox{\includegraphics[width=1\linewidth]{photo/04_history_of_machine_learning}}
-	\caption{Determining critical technologies within the domains of \Gls{ai} (extended representation by Dmitri Gross according to a presentation from Michael Copeland) \cite{Gross2017} \cite{COPELAND2017}}
+	\caption{Determining critical technologies within the domains of artificial intelligence(extended representation by Dmitri Gross according to a presentation from Michael Copeland) \cite{Gross2017} \cite{COPELAND2017}}
 	\label{fig:04_history_of_machine_learning}
 \end{figure}
 
-According to the science magazine, the most influential computer scientist, in the field of pattern recognition, Michael Jordan wants to give another modern definition. His objective was to give a neutral statement, which defines the word \gls{ai}. He says:
+According to the science magazine, the most influential computer scientist, in the field of pattern recognition, Michael Jordan wants to give another modern definition. His objective is to give a neutral statement, which defines the word artificial intelligence. He says:
 
 \begin{quote}
 	\textit{"It is one of today's rapidly growing technical fields, lying at the intersection of computer science and statistics, and at the core of artificial intelligence and data science" \cite{Bohannon2016} \cite{Jordan255}}
 \end{quote}
 
-Furthermore, with this definition, Jordan wants to connect the terms of \gls{ml} and statistics. In his opinion, these two terms are the essential components of \Gls{ai} \cite{MichaelJordan2018}. Figure \ref{fig:04_history_of_machine_learning} shows how machine learning has changed over the last decades. It shows that machine learning became popular in the eighties, as a result of the increasing use of personal computers (PC). Furthermore, you can see deep learning - which is one of the crucial parts of my thesis - gained on popularity until 2010, caused by the development of more powerful \Gls{gpu} (GPU). Besides Figure \ref{fig:04_history_of_machine_learning} is criticized as well. Mainly because of the unclear definitions terminology which is used in it. Anyways it can be used to get an overview of the historical evolution of the field. 
+Furthermore, with this definition, Jordan wants to connect the terms of machine learning and statistics. In his opinion, these two terms are the essential components of artificial intelligence \cite{MichaelJordan2018}. Machine learning has changed over the last decades. Machine learning became popular in the eighties, as a result of the increasing use of personal computers. Furthermore, deep learning gained on popularity until 2010, caused by the development of more powerful graphical processor units. This statement is criticized as well. Mainly because of the unclearly defined terminology. Anyways it is useful to get an overview of the field and the historical evolvement over the last years (\hyperref[fig:04_history_of_machine_learning]{Figure \ref{fig:04_history_of_machine_learning}}). 
 
 \begin{figure}[htp]
 	\centering
 	\fbox{\includegraphics[width=0.4\linewidth]{photo/05_deep_learning_sucess_with_alpha_go.jpeg}}
-	\caption{The Netflix documentary Alphago is part of the hype around \gls{dl} Methods. Critics claim until the problem of transparency is not solved this results are not crucial because those models can not be used in a real-world application \cite{Thetruec1:online}}
+	\caption{The Netflix documentary Alpha Go is part of the hype around deep learning methods. Critics claim until the problem of transparency is not solved this results are not crucial because these models can not be used in a real-world application \cite{Thetruec1:online}}
 	\label{fig:05_deep_learning_sucess_with_alpha_go}
 \end{figure}
 
-Alpha Go, which is developed by the Google Research Laboratory, is a good example of the popularity of \gls{dl} Methods. It shows how an enormous amount of time and hardware resources can lead to success as the artificial player has been the world ranked number one in the board game go. But this success is criticized as well, because it is not a real-world application and gots pushed by a Netflix Documentary, Scientist Claim that it is just an overhyped topic as long as the models could not be explained (Figure \ref{fig:05_deep_learning_sucess_with_alpha_go}).
+Alpha Go, which is developed by the Google Research Laboratory, is a good example of the popularity of deep learning methods. It shows how an enormous amount of time and hardware resources can lead to success as the artificial player has been the world ranked number one in the board game Go. But this success is criticized as well, because it is not a real-world application and gots pushed by a Netflix documentary, scientist claim that it is just an overhyped topic as long as the model could not explain its decisions (\hyperref[fig:05_deep_learning_sucess_with_alpha_go]{Figure \ref{fig:05_deep_learning_sucess_with_alpha_go}}).
 
 \section{Suprvised Machine Learning for Upload Filters}
 \label{sec:supervised_learning}
-By doing the following steps, a \Gls{cf} (Definition \ref{def:cost_function}) will be optimized to get a prediction on unseen data, as defined by Mitchel (Section \ref{sec:history}). An example application is an \gls{ul} which determines if a dog or a cat is on an image:
+By doing the following steps, a so called cost function (\hyperref[def:cost_function]{Definition \ref{def:cost_function}}) will be optimized to get a prediction on unseen data, as defined by Mitchel (\hyperref[sec:history]{Section \ref{sec:history}}). An example application is an upload filter which determines if a dog or a cat is on an image:
 
 \begin{enumerate}
 	\itemsep-0.8em 
-	\item Eliminate empty entries and statistically irrelevant data (e.g. duplicates) 
-	\item Put input data in the required form (defined the form of implementation)
-	\item Split the Data into a test and a training set (to test on unseen data)
+	\item Eliminate empty entries and statistically irrelevant data e.g. duplicates
+	\item Rescale the input data in the required form
+	\item Split the Data into a test and a training set
 	\item Initialize the parameters of the model
-	\item Learn the parameters for the model by minimizing the \gls{cf}(Definition \ref{def:cost_function})
-	\item Use the learned parameters to make predictions (Definition \ref{def:mapping_function}))
-	\item Test the ability of the model to predict unseen data correctly
+	\item Learn the parameters for the model by minimizing the cost function (\hyperref[def:cost_function]{Definition \ref{def:cost_function}})
+	\item Use the learned parameters to make predictions (\hyperref[def:mapping_function]{Definition \ref{def:mapping_function}})
+	\item Test the ability to predict patterns on unseen data correctly
 \end{enumerate}
 
-In the following, these steps are described while focusing on the details of the current step. The example of an Instagram Upload filter is a \Gls{clt} which can be solved by a \Gls{sla}. It is designed to learn by example (cat images) \cite[p. 3 - 4]{Murphy2012}. As can be seen in Figure \ref{fig:06_example_dog_vs_cat_dataset}, examples of cats and suitable counterexamples are assumed to be given before we start to design an \Gls{sla}.\\\\
+In the following, these steps are described in greater detail. The example of an Instagram upload filter is a classification task which can be solved by a supervised machine learning algorithm. It is designed to learn by example, \cite[p. 3 - 4]{Murphy2012}. Examples of cats and suitable counterexamples are assumed to be given before a supervised machine learning algorithms get developed.   (\hyperref[fig:06_example_dog_vs_cat_dataset]{Figure \ref{fig:06_example_dog_vs_cat_dataset}}).\\\\
 
 \begin{figure}[htp]
 	\fbox{\includegraphics[width=1\linewidth]{photo/06_example_dog_vs_cat_dataset}}
-	\caption{Images of detected cats, examples sampled from the from the "ImaegNet" data set\cite{Building13:online}}
+	\caption{Examples sampled from the the ImaegNet data set. The pattern on these images are similar to the patterns which the prototype shall recognise \cite{Building13:online}.}
 	\label{fig:06_example_dog_vs_cat_dataset}
 \end{figure}
 
-The name "\Gls{sl}" comes from the idea that training this type of algorithm is like having a supervisor which observes the whole learning process, e.g. recognize cats on images after having seen enough examples and counterexamples. At the same time, someone leads the algorithm to the correct result \cite[p. 103]{Goodfellow-et-al-2016} \cite[p. 3]{Murphy2012}. Technically spoken, these input data is called \gls{td}. They consist of input data (for example, values that represent an image) and output data (for example, the class which an image belongs to). During training, the algorithm will search for patterns in the input data that correlate with the desired outputs. After training, the supervised learning algorithm will take in new unseen inputs (cats, no cats or both). Afterwards, the algorithm determines which labels, are used to classify the original inputs, based on prior training data. Such an algorithm can be expressed as follows \cite[p. 3]{Murphy2012}:
+The name supervised learning comes from the idea that training this type of algorithm is like having a supervisor which observes the whole learning process, e.g. recognize cats on images after having seen enough samples of the same distribution. At the same time, a "trainer" leads the algorithm to the correct result \cite[p. 103]{Goodfellow-et-al-2016} \cite[p. 3]{Murphy2012}. Technically spoken, these input data is called training data. First, training data consists of input data, for example, values that represent an image. Second, training data consists of output data, for example, the class which an image belongs to. During training, the algorithm will search for patterns in the input data that correlate with the desired outputs. After training, the supervised learning algorithm will feed with new unseen examples such that its ability to predict unseen data can be tested. So, the algorithm determines which labels correspondent to the unseen examples, based on optimized parameters. Such an algorithm can be expressed as follows \cite[p. 3]{Murphy2012}:
 
 \begin{definition}[label=def:mapping_function]{Mapping Function}
 	\begin{align*}
-	f(X) = \hat{y}
+		f(X) = \hat{y}
 	\end{align*}
 	where \\\\
-	f() = mapping function e.g. assigns the label cat to a cat picture\\
-	X   =  (several) input values e.g. images with cats\\
-	\( \hat{y}\) = predicted output e.g. a label with cat or no cat\\
+	\( f() \) = Mapping function which assigns the labels to a given input. \\
+	\( X \)   = A matrix of input value where each column in \( X \) stands for a single example. \\
+	\( \hat{y}\) = The determined labels for each column in \( X \) represented by a vector.\\
 \end{definition}
 
-Where \(\hat{y}\) is the predicted output, which is determined by a mapping function \(f\) that assigns a label to a single value or a set of multiple-input values donated by \(X\), the function connects an input (features) to a predicted output (probability). The logic behind this function is also called machine learning model \cite[p. 3]{Murphy2012}.\\
+Where \(\hat{y}\) is the predicted output, which is determined by a mapping function \(f\) that assigns a label to a single value or a set of multiple-input values donated by \(X\), the function connects an input features to a probability to belong to a certain class. The logic behind this function is also called machine learning model \cite[p. 3]{Murphy2012}.\\
 
-Before \gls{mla} (model) which detects cats on images gets trained, the \Gls{td} has to be prepared. This step is called \Gls{pp}. Training data consists of inputs paired with the correct outputs \cite{brownlee2019deep}. For example, the inputs are the samples of cat images, where the outputs are the right labels of our examples. When talking about the training of a \gls{mla} (Model), the optimization of a function is always meant by that. Further, the function to be optimized is the mapping function which assigns an output value to the given input. Therefore the parameters of the function will be optimized during the training process, such that the output values match the actual output values as closely as possible. In other words, such that the real values as close as possible to the predicted values  (Definition \ref{def:cost_function}). Usually, that is an optimization problem and is solved with different techniques. The technique also determines the required form of the input and output data (Step 2). If we used a \Gls{lr} to classify cats, a structure as can be seen in Definition \ref{def:structure_for_linear_logistic_regression} is necessary. \gls{lr} is a model which is applied to determine the probability of a certain class or event exists such as pass/fail, win/lose, alive/dead or healthy/sick. It can be extended to predict several classes of events such as determining whether an image contains a cat, dog, lion, etc.
+Before a machine learning algorithm gets trained, the training data has to be prepared. This step is called preprocessing. An example of this is a machine learning algorithm which detects cats on images. Therefore training data is required to be preprocessed. This means the data has to be prepared such it fits into the mapping function. In the example of an machine learning algorithm which detects cat and dogs, this means the images transformed such that they are represented by a matrix. Within this matrix, every column stands for an example. Furthermore, the corresponding labels shall be in the form of a vector. Therefore, every value within this vector corresponds to a column in the input matrix. The vector represents the labels by zeros and ones. For example, a zero at the first position in the output vector means that the first column in the input matrix shows a cat \cite{brownlee2019deep}.
+
+When talking about the training of a machine learning algorithm, the optimization of a function is always meant by that. Further, the function to be optimized is the mapping function which assigns an output value to a given input. Therefore the parameters of the function will be optimized during the training process, such that the output values match the actual output values as closely as possible. In other words, such that the real values as close as possible to the predicted values  (\hyperref[def:cost_function]{Definition \ref{def:cost_function}}). Usually, that is an optimization problem and is solved with different techniques. The technique also determines the required form of the input and output data, as suggested in step two. If we used a logistic regression to classify cats, a structure as can be seen in \hyperref[def:structure_for_linear_logistic_regression]{Definition \ref{def:structure_for_linear_logistic_regression}} is necessary. The logistic regression is a model which is applied to determine the probability of a certain class or event exists such as pass/fail, win/lose, alive/dead or healthy/sick. It can be extended to predict several classes of events such as determining whether an image contains a cat, dog, lion, etc.
 
 \begin{definition}[label=def:structure_for_linear_logistic_regression]{required input format for a machine learning program with logical regression}
 	\begin{align*}
-	& X \in \mathbb{R}^{n_{x}\times m}  \\
-	& y \in \mathbb{R}^{m}
+		& X \in \mathbb{R}^{n\times m}  \\
+		& y \in \mathbb{R}^{m}
 	\end{align*}
 	where \\\\
-	\( X \)X = an input matrix e.g. each column represents the values of an (cat) images\\
-	Y = a single row matrix e.g. each column holds a binary value (yes/ no)\\
-	\( n_{x} \) = number of values which represents one example e.g. pixels of an image \\
-	m = number of examples e.g. (cat) images \\
-	\( \mathbb{R} \) = all values are in real number space \\
+	\( X \) = A matrix of input values. Each column in stands for a single example. \\
+	\( y \) = A vector with labels. Each value belongs to a column of the input matrix\\
+	\( n \) = Total amount of input features\\
+	\( m \) = Total amount of examples\\
+	\( \mathbb{R} \) = All values are in real number space \\
 \end{definition}
 
-A pixel image of a cat, as you can see on the left-hand side in Figure \ref{fig:07_image_vector_representation.png}, is represented as three matrices (Figure \ref{fig:07_image_vector_representation.png}, centre). With the help of mathematical functions from the field of linear algebra, the images are transformed from the matrix form into a vector form (Figure \ref{fig:07_image_vector_representation.png}, right) \cite[p. 276]{brownlee2019deep}. Even if it is not necessary, it is recommended to normalize the values. Otherwise, the calculations could become very slow and very memory intensive. \cite[p. 57]{Goodfellow-et-al-2016}.
+A pixel image of a cat, as you can see on the left-hand side in \hyperref[fig:07_image_vector_representation.png]{Figure \ref{fig:07_image_vector_representation.png}}, is represented as three matrices (\hyperref[fig:07_image_vector_representation.png]{Figure \ref{fig:07_image_vector_representation.png}, centre}). With the help of mathematical functions from the field of linear algebra, the images are transformed from the matrix form into a vector form (\hyperref[fig:07_image_vector_representation.png]{Figure \ref{fig:07_image_vector_representation.png}, right}) \cite[p. 276]{brownlee2019deep}. Even if it is not necessary, it is recommended to normalize the values. Otherwise, the calculations could become very slow and very memory intensive. \cite[p. 57]{Goodfellow-et-al-2016}.
 
 \begin{figure}[htp]
 	\fbox{\includegraphics[width=1\linewidth]{photo/07_image_vector_representation.png}}
-	\caption{At the beginning a picture is represented by three matrices. Each for one colour channel (red, green and blue). After transforming it with linear algebra we get a vector.}
+	\caption{An image is represented by three matrices. Each for one colour channel (red, green and blue). After transforming it with linear algebra it becomes a vector.}
 	\label{fig:07_image_vector_representation.png}
 \end{figure}
 
-Because we want to optimize the \gls{cf} (Definition \ref{def:cost_function}) for many examples, instead of just one, we store the input in a matrix (Definition \ref{def:structure_for_linear_logistic_regression}). After transforming a picture, we get a vector, so it is mandatory to store every single vector in the column of a matrix. Matrix representations are one of the reasons why machine learning algorithms are much more efficient because nowadays, memory is cheaper than computing power. Without matrix multiplication, more loops would be needed. Loops, on the other hand, require a relatively large amount of computing power, especially for extensive data. Matrix multiplication requires a lot of memory but requires fewer loops and therefore, less computing power. Due to the extreme amounts of data that are processed during the calculation of machine learning algorithms, these effects are multiplied by each other, which makes an efficient computation even more important \cite{AndrewNG}.\\
+The objective is to optimize the cost function (\hyperref[def:cost_function]{Definition \ref{def:cost_function}}) for many examples. This is why the input gets feed into a matrix (\hyperref[def:structure_for_linear_logistic_regression]{Definition \ref{def:structure_for_linear_logistic_regression}}). After transforming an image, we get a vector, so it is mandatory to store every single vector in the column of a matrix. Matrix representations are one of the reasons why machine learning algorithms are much more efficient. Nowadays, memory is cheaper than computing power. Without matrix multiplication, more loops are required. Therefore, loops require a relatively large amount of computing power, especially for extensive data. Matrix multiplication requires a lot of memory but requires fewer loops and therefore, less computing power. Due to the extreme amounts of data that are processed during the calculation of machine learning algorithms, these effects are multiplied by each other, which makes an efficient computation even more important \cite{AndrewNG}.\\
 
-The next step in designing a \Gls{sla}(after the preprocessing is done) is to create a specific function which can be optimized. At first, a linear function which looks like the following is used:
+The next step in designing a machine learning algorithm is to create a specific function which can be optimized. As a first step  a linear function which looks like the following can be used:
 
 \begin{definition}[label=lf]{A Linear Function as a vector and matrix representation to compute multiple input values at once}
 	\begin{align*}
-	z = W X + b
+		z = W X + b
 	\end{align*}
 	where \\\\
-	z = Results of the linear function (one for each example)\\
-	W = A matrix with parameters assigned to every row of the input matrix X\\
-	X = Matrix as a result of the preprocessing \\
-	b = Intercept added in a linear equation called \Gls{bias} parameter.\\
+	\(z\) = The results of the linear function\\
+	\(W\) = A matrix with parameters assigned to every row of the input matrix \( X \)\\
+	\(X\) = A matrix of input value where each column in \( X \) stands for a single example. \\
+	\(b\) = Intercept added in a linear equation called bias parameter.\\
 \end{definition}
 
-The output values of the linear function can then be passed to a \Gls{sf}. Every function which is used after calculating the linear function itself is an so-called \Gls{af}. They are mathematical equations to determine the output of a neural network. An \Gls{af} can be used for different tasks. So the \gls{sf} (Definition \ref{def:sf}) is one specific example which maps a value between 0 and 1 to each output. In such a way, that this value can be interpreted as a probability (Definition \ref{def:sf}). Finally, a label can be assigned to the input by using a rule-based approach. For example, it could be the case that if the probability is greater than 50\% that a certain case will occur, a positive label will also be assigned (the probability that a cat is on the image is greater than 50\%, then the image has the label cat).\\
+Next step in order to get the results is to pass the results \( z \) to a sigmoid function. Every function which is used after calculating the linear function itself is a so-called activation function. Activation functions are mathematical equations to determine the output of a neural network. Furthermore, an activation function can be used for different tasks. In the pretend example the sigmoid function   (\hyperref[def:sf]{Definition \ref{def:sf}})  maps a value between 0 and 1 to each output. In such a way, that this value can be interpreted as a probability (\hyperref[def:sf]{Definition \ref{def:sf}}). Finally, a label can be assigned to the input by using a rule-based approach. For example, it could be the case that if the probability is greater than 50\% that a certain case will occur, a positive label will also be assigned (the probability that a cat is on the image is greater than 50\%, then the image has the label cat).\\
 
 \begin{definition}[label=def:sf]{Sigmoid Function e.g. for using it to get probabilities}
 	\begin{align*}
-	\hat{y} = sigmoid(z)
+		\hat{y} = sigmoid(z)
 	\end{align*}
 	where \\\\
-	z = The results of the linear function (one for each example)\\
-	\( \hat{y}\) = Calculated labels (one for each example) \\
+	\( \hat{y}\) = The determined labels for each column in \( X \) represented by a vector.\\
+	\( z \)  = The results of the linear function\\
 \end{definition}
 
-The next step for the Instagram Upload Filter is to get a criteria, which we can use to optimize the parameters. In other words to quantify the success of our training process. In order to get such a criteria a so-called error value is formed. This is calculated from the actual label (\(y\) )and the predicted label (\( \hat{y} \)). How exactly this calculation is done is determined by the loss function. For example the loss function could be defined by the cross-entropy function \(\mathcal{L}\), which compares the given values with the calculated values. Every function in machine learning that could be used to compute such an error would be called \Gls{lf}. Finally, all error values of the individual examples are summed up and divided by the total number of examples (images). This way, we get an error function \(\mathcal{J}\) which maps a single value to all errors. This error function can be optimized during the training process so that we get parameters (\(\mathcal{W} \) and b) of the function which leads to a global minimum of the function. While in the first step, the so-called \gls{fp}, the error values and calculations are performed, in the second step the weights of the function will be optimized. This step uses the chain rule to form the gradient of the weights and adjust them according to this gradient. In the literature, the second step is commonly called \gls{bp}. I will go into this procedure in more detail in section  \hyperref[sec:gd]{Gradient Decent and the Gradient (\ref{sec:gd})}. Because it shows the overall cost in \Gls{ml} Literature, the function which sums up every loss of each input is name \Gls{cf}:
+The next step for the example of an Instagram upload filter is to get a criterion, which can be used to optimize the parameters. In other words, to quantify the success of the training process. In order to get such a criterion, a so-called error value is formed. This is calculated from the actual label (\(y\) )and the predicted label (\( \hat{y} \)). How exactly this calculation is done is determined by the loss function. For example the loss function could be defined by the cross-entropy function (\hyperref[def:cost_function]{Definition \ref{def:sf}}), which compares the given values with the calculated values. Every function in machine learning that could be used to compute such an error can be used as a loss function as well. Finally, all error values of the individual examples are summed up and divided by the total number of examples. The function which will be used to do so is therefore called error function and denoted by \(\mathcal{J}\). \(\mathcal{J}\) maps a single value to all errors. Finally, the error function \(\mathcal{J}\) gets optimized during the training process such that the parameters (\( W \) and \( b \)) adjusted such that the error function \(\mathcal{J}\) reaches a global minimum. While in the first step, the so-called forward propagation, the error values and calculations are calculated, in the second step, the weights of the function will be optimized. This step uses the chain rule to form the gradient of the weights and adjust them according to this gradient. In the literature, the second step is commonly called backward propagation. This step is explained in greater detail in \hyperref[sec:gd]{Section (\ref{sec:gd})}. 
 
 \begin{definition}[label=def:cost_function]{Cost Function which can be optimized}
 	\begin{align*}
-	\mathcal{J} = \frac{1}{m} \sum_{i=1}^m \mathcal{L}(\hat{y}^{(i)}, y^{(i)})
+		\mathcal{J} = \frac{1}{m} \sum_{i=1}^m \mathcal{L}(\hat{y}^{i}, y^{i})
 	\end{align*}
 	where \\\\
-	m = Number of examples e.g. number of cat and no cat images \\
+	\(m\)  = Number of examples e.g. number of cat and no cat images \\
 	\(\mathcal{L}\) = Cross-Entropy function \\
-	\(\hat{y}\textsuperscript{i}\) = Calculated label for the \(i\textsuperscript{th} \) example\\
-	\(y\textsuperscript{i}\)     = Correct label for the \(i\textsuperscript{th} \)  example\\
+	\(\hat{y}\textsuperscript{i}\) = Calculated label for the \(i\)th example\\
+	\(y\textsuperscript{i}\)     = Correct label for the \(i\)th  example\\
 	\(    \mathcal{J} \) = Cost Function which can be optimized s. t. it is at its global minimum
 \end{definition}
 
-The \Gls{cf} should not be optimized as close as possible to the training data. A function which would fit perfectly is called over-fitted. 
+The cost function (\hyperref[def:cost_function]{Definition \ref{def:cost_function}}) should not be optimized as close as possible to the training data. A function which fits perfectly is called over-fitted. 
 
-Overfitting means models perform well on the training data but don’t generalize well for new data. It happens when the model is too complex relative to the amount and noisiness of the training data. So, how do we know the parameters are overfitted? If a test against the training set gets excellent results but, a test against the test set has very low accuracy, t model is likely overfitted. So, it's time to take corrective measure \cite[p. 110]{Goodfellow-et-al-2016}. Anyway, the goal of supervised learning as in the Instagram Upload Filter is to achieve high performance on unseen data. To do that the data has to be divided into a test and a training set. The training set is used like described before (preprocessing the data and approximate the cost function to its global minimum). In contrast, the test data set would only be preprocessed and then used to make predictions about unseen cat images. So it is possible to test the neural network of its ability to predict unseen data (\hyperref[sec:history]{History of Machine Learning (\ref{sec:history})}).\\\\
+Overfitting means models perform well on the training data but do not generalize well for new data. It happens when the model is too complex relative to the amount and noisiness of the training data. If the accuracy on predicting patterns within the training set is high, but the accuracy on predicting patterns on images from the test set is low, the machine learning algorithm is likely overfitted. So, it is time to take corrective measure \cite[p. 110]{Goodfellow-et-al-2016}. Anyway, the goal of supervised learning as in the Instagram upload filter example is to achieve high performance on unseen data. To do that the data has to be divided into a test and a training set. The training set is used like described before (preprocessing the data and approximate the cost function to its global minimum). In contrast, the test data set would only be preprocessed and then used to make predictions about unseen cat images. So it is possible to test the neural network of its ability to predict unseen data \hyperref[sec:history]{Section (\ref{sec:history}}).\\\\
 
-In other words, every step is necessary to train a machine-learning algorithm to predict if it is a cat or not. In figure \ref{fig:08_process_of_pretictions_for_a_cat_image} where
+In other words, every step is necessary to train a machine-learning algorithm to predict if it is a cat or not. In  \hyperref[fig:08_process_of_pretictions_for_a_cat_image]{Figure \ref{fig:08_process_of_pretictions_for_a_cat_image}} is the process of predicting an \(\times64 \) image visualized. Therefore the notations are explained in \hyperref[def:label]{Definition \ref{def:label}}.
 
-\begin{itemize}
-	\item \(\boldsymbol{x\textsubscript{x}} \) is \(x\textsuperscript{th}\) pixel of an image representation,
-	\item \(\boldsymbol{W\textsubscript{x}}\) is \(x\textsuperscript{th}\) parameter assigned to each pixel of\(x\textsuperscript{th}\),
-	\item \textbf{W X + b} is  the linear function which computes a first output and
-	\item \(\boldsymbol{\sigma}\) is the sigmoid function
-\end{itemize}
+\begin{definition}[label=def:label]{Cost Function which can be optimized}
+	\(x\textsuperscript{th} \) = exists for each pixel of the \(i\)th example \\
+	\( W\textsubscript{x} \) = \(x\)th parameter assigned to each pixel of \(x\textsuperscript{th}\) \\
+	\( W a + b\) = the linear function which computes a first output (\hyperref[lf]{Definition \ref{lf}}) \\
+	\( \sigma \) = the sigmoid function to get the labels  (\hyperref[def:sf]{Definition \ref{def:sf}})
+\end{definition}
 
-is the process of predicting an \(64\times64 \) image visualized.
 
 \begin{figure}[htp]
 	\fbox{\includegraphics[width=1\linewidth]{photo/08_process_of_pretictions_for_a_cat_image.png}}
-	\caption{The image visualizes the whole process of using an image (1) and putting this into a single neuron (4). First, the neuron calculates a linear function and uses the result as input to a sigmoid function (becomes an interpretable value between zero and one). The network can make a prediction (5) while using a decision boundary (e.g. if the probability is higher as 0.5 that it is a cat) if the forecast is not correct, the parameters of the function (2, 3) getting adjusted as long as the function is optimized. Finally, we hat an approximation that fits (as close as possible) to all training examples.}
+	\caption{The image visualizes the whole process of using an image (1) and putting this into a single neuron (4). First, the neuron calculates a linear function and uses the result as input to a sigmoid function (becomes an interpretable value between zero and one). The network can make a prediction (5) while using a decision boundary (e.g. if the probability is higher as 0.5 it is a cat) if the forecast is not correct, the parameters of the function (2, 3) getting adjusted as long as the function is optimized. Finally, we get an approximation that fits all training examples as close as possible.}
 	\label{fig:08_process_of_pretictions_for_a_cat_image}
 \end{figure}
 
-An algorithm that works like this can be considered as simple neural network \cite{Britz2015}. The term neural came from the fact that at first scientists tried to recreate the functionality of neurons in the human brain. Besides the early beginning, neural networks haven't much in common with the brain because actually, it seems the brain is much more complicated as it seems before \cite{Kriesel2007NeuralNetworks}. However, it is called a network because usually different neurons working together. In the simple scenario from Figure \ref{fig:08_process_of_pretictions_for_a_cat_image} we had just one neuron (Figure \ref{fig:09_example_of_a_single_neuron})
+An algorithm that works like this can be considered as a simple neural network \cite{Britz2015}. The term neural came from the fact that at first scientists tried to recreate the functionality of neurons in the human brain. Besides the early beginning, neural networks have not much in common with the brain because actually, it seems the brain is much more complicated as it seems before \cite{Kriesel2007NeuralNetworks}. However, it is called a network because usually different neurons working together. In the simple scenario from \hyperref[fig:08_process_of_pretictions_for_a_cat_image]{Figure \ref{fig:08_process_of_pretictions_for_a_cat_image}} we had just one neuron (\hyperref[fig:09_example_of_a_single_neuron]{Figure \ref{fig:09_example_of_a_single_neuron}})
 
 \begin{figure}[htp]
 	\centering
 	\fbox{\includegraphics[width=0.4\linewidth]{photo/09_example_of_a_single_neuron}}
-	\caption{An Example for a single neuron. First, a linear the output will be calculated by a simple linear function with the parameters \(W\) and \(b\). Afterwards the output will be normalized to get probabilities (values between 0 and 1).}
+	\caption{An example for a single neuron. First, a linear output will be calculated by a simple linear function with the parameters \(W\) and \(b\). Afterwards the output will be normalized to get probabilities.}
 	\label{fig:09_example_of_a_single_neuron}
 \end{figure}
 
-For the Instagram Upload Filter, such a \Gls{nn}\footnote{The achieved accuracy is not always precisely the same, because the local minimum is reached during optimization instead of the global minimum. In practice, this change is hardly relevant. Besides, the results can differ depending on the implementation. The results presented here were obtained with the programming language Python using frameworks from the field of data science.} achieves a test accuracy of about 70\% (Listing \ref{lst:acc}).\\\\
+For the Instagram upload filter, such a neural network\footnote{The achieved accuracy is not always precisely the same, because the optimization just reaches a local minimum rather than a global minimum. In practice, this change is hardly relevant. Besides, the results can differ depending on the implementation. The results presented here were obtained with the programming language Python using frameworks from the field of data science.} achieves a test accuracy of 70\% (\hyperref[lst:acc]{Listing \ref{lst:acc}}).\\\\
 
 \begin{lstlisting}[captionpos=b,label={lst:acc},language=Python, caption=Test accuracy is 70\% after iteration 2000 times and using 209 examples with 12287 features (\(64\times64 \) pixels). This is not state of the art but very good if considering that this is a linear classifier on a high dimensional feature space.]
 Cost after iteration 0: 0.693147
 Cost after iteration 1000: 0.214820
-Cost after iteration 1100: 0.203078
-Cost after iteration 1200: 0.192544
-Cost after iteration 1300: 0.183033
-Cost after iteration 1400: 0.174399
-Cost after iteration 1500: 0.166521
-Cost after iteration 1600: 0.159305
-Cost after iteration 1700: 0.152667
+...
 Cost after iteration 1800: 0.146542
 Cost after iteration 1900: 0.140872
 train accuracy: 99.04306220095694 %
 test accuracy: 70.0 %
 \end{lstlisting}
 
-It is crucial to achieve a higher accuracy before creating a transparent neural network which is easy to understand. To introduce more precise methods is the goal of the next section.
+It is crucial to achieving a higher accuracy before creating a transparent neural network which is easy to understand. Within the next section, machine learning algorithms will be introduced to get higher accuracy.
 
 \subsection{Deep Learning Neural Networks}
 \label{subsec:deep_learning}
-Instead of just using one neuron to predict if an image shows a cat, the \Gls{nn} can look like in Figure \ref{fig:10_process_of_pretictions_for_a_cat_image_two_layers}, where
-
-\begin{itemize}
-	\item \(\boldsymbol{x\textsubscript{x}}\) is the \(x\textsubscript{th}\) pixel of an image representation,
-	\item \(\boldsymbol{a\textsubscript{[1]}}\) is calculated input values from the first layer,
-	\item \(\boldsymbol{W\textsubscript{[1]}}\) is the parameters assigned to each pixel of \( x\textsubscript{x}\),
-	\item \(\boldsymbol{W\textsubscript{[2]}}\) is the parameters assigned to each input  \(a\textsubscript{[1]}\textsubscript{n}\) input, calculated by layer one
-	\item \textbf{W X + b} is the linear function which computes a first output and
-	\item \(\boldsymbol{\sigma}\) is the sigmoid function,
-\end{itemize}
+\hyperref[fig:10_process_of_pretictions_for_a_cat_image_two_layers]{Figure \ref{fig:10_process_of_pretictions_for_a_cat_image_two_layers}} shows how the same network as in \hyperref[fig:08_process_of_pretictions_for_a_cat_image]{Figure \ref{fig:08_process_of_pretictions_for_a_cat_image}} would look like if we would use two layers. Therefore the notations are explained in 
+\hyperref[def:label2]{Definition \ref{def:label2}}.
+\begin{definition}[label=def:label2]{Cost Function which can be optimized}
+	\(x\textsubscript{th} \) = exists for each pixel of the \(i\)th example \\
+	\(a\textsubscript{th} \) = a so called neuron which gets the results from the first layer \\
+	\( WX+b\) = the linear function which computes a first output (\hyperref[lf]{Definition \ref{lf}}) \\
+	\( \sigma \) = the sigmoid function to get labels  (\hyperref[def:sf]{Definition \ref{def:sf}})
+\end{definition}
 
 \begin{figure}[htp]
 	\centering
 	\fbox{\includegraphics[width=0.8\linewidth]{photo/10_process_of_pretictions_for_a_cat_image_two_layers.png}}
-	\caption{The picture visualizes the whole process of using an image (1) and putting this into two neurons (1,2). The first calculates a linear function and put the result into a  function so that it can be forwarded normalized to the second neuron. The next takes the values and calculates (as before) the result of a linear function which would be made interpretable while using the sigmoid function (between zero and 1). Last but not least, the result can be interpreted so that the network can make a prediction (5). If the forecast is not correct, the parameters of the function (2, 3, 4) getting adjusted. It will be adjusted (fitted) as long as the function is optimized to match as best as possible to all training examples.}
+	\caption{As before in the \hyperref[fig:08_process_of_pretictions_for_a_cat_image]{Figure \ref{fig:08_process_of_pretictions_for_a_cat_image}} The image visualizes the whole process of using a neural network to recognise patterns of cats and dogs. Instead of just on layer now the machine learning algorithm uses two layers.}
 	\label{fig:10_process_of_pretictions_for_a_cat_image_two_layers}
 \end{figure}
 
-shows how the same network as before would look like if we would use two neurons  (1, 3) in two layers (4,5). On the one hand, more neurons resulting in an increasing amount of parameters which the algorithm has to optimize \cite[p. 21]{Goodfellow-et-al-2016}. So, for example, to find a global minimum for a \Gls{cf} in our Instagram Upload Filter example, it would take significantly more time and requires more cat images. But on the other hand (if correctly implemented) a neural network with more neurons and multiply layers would outstand a neural network with just one neuron by far. Listing \ref{lst:acc2l} shows that the algorithm detects up to 80\% of the pictures (if it shows a cat example or not). So, the deep neuronal network, compared with a single layer neural network, has increased by 10\%.
+On the one hand, more layers resulting in an increasing amount of parameters which the algorithm has to optimize \cite[p. 21]{Goodfellow-et-al-2016}. For example, to find the global minimum of a cost function in our Instagram upload filter example, it would take significantly more time and requires more examples. And even then it is not sure if such a global minimum exists. On the other hand, a neural network with more layers would outstand a neural network with just one layer by far. \hyperref[lst:acc2l]{Listing \ref{lst:acc2l}} shows that the algorithm detects up to 80\% of the images. So, the deep neuronal network, compared with a single layer neural network, has increased by 10\%.
 
-As I mentioned before, the results could be much better if more examples were used as input data. The required time and computing capacity would be comparatively low with such an implementation. Nevertheless, I will use the algorithm with more input at this place, because the given amount is sufficient to present the mentioned advantages \cite[p.167]{Goodfellow-et-al-2016} \cite[p.995 - 997]{Murphy2012}.\\
+The results could be better if more examples were used as input data. The required time and computing capacity would be comparatively low with such an implementation. That is why the neural network is just used with the same amount of examples  \cite[p.167]{Goodfellow-et-al-2016} \cite[p.995 - 997]{Murphy2012}.
 
-In general, the term is related to the number of layers. Andrew Ng suggests that neural nets with more than one layer should be called deep \cite{AndrewNG}. Furthermore, every layer which is not the output and not the output layer itself would be called the hidden layer. Whereas the output layer counts to the total amount of layers, the input layer is usually not considered as a so-called layer. There is not an exact definition of what a layer exactly is. Most sources are excluding the input and including the output layer. Steps in which an activation function activates the neurons do not count as independent layers. They belong to the previous layer (to which the neuron also belongs which input this function receives to standardize it)\cite{AndrewNG} \cite{Kriesel2007NeuralNetworks} \cite{Goodfellow-et-al-2016}.\\
+In general, the term deep within deep neural networks is related to the number of layers. Andrew Ng suggests that neural networks with more than one layer should be called deep \cite{AndrewNG}. Furthermore, every layer which is not the output and not the output layer itself would be called the hidden layer. Whereas the output layer counts to the total amount of layers, the input layer is usually not considered as a layer. There is not an exact definition of what a layer exactly is. Most sources are excluding the input and including the output layer. Steps in which an activation function activates the neurons do not count as independent layers. They belong to the previous layer \cite{AndrewNG} \cite{Kriesel2007NeuralNetworks} \cite{Goodfellow-et-al-2016}.
 
-\begin{lstlisting}[captionpos=b,label={lst:acc2l}, float=tb,language=Python, caption=Test accuracy is 80\% after iteration 2400 times and using 209 examples with 12288 features (\(64\times64 \) pixels). This is not state of the art but very good if considering that this is an algorihm wich is not spezialised to recoginize images.]
-...
-Cost after iteration 1600: 0.148214
-Cost after iteration 1700: 0.137775
-Cost after iteration 1800: 0.129740
-Cost after iteration 1900: 0.121225
-Cost after iteration 2000: 0.113821
-Cost after iteration 2100: 0.107839
-Cost after iteration 2200: 0.102855
-Cost after iteration 2300: 0.100897
-Cost after iteration 2400: 0.092878
-train accuracy: 98.5645933014 %
-test accuracy: 80.0 %
-\end{lstlisting} A problem with the neural network, which is not deep (introduced above) would be its capability of training with larger images. So, the network was built to recognize patterns on images with 1288 input features ((\( 64 \times 64\) pixels). Suppose the input is a (\( 300 \times 300\) RGB image, the first layer of the network has 100 neurons, and each one is fully connected (fully connected layer) to the input. Fully connected means that each neuron in the previous layer is connected to each node in the following layer.The number of parameters which the training process has to optimize would be calculated with the following formula \cite{Vasudev2019}\cite{DBLP:journals/corr/TraskGR15}.
+A problem with the neural network, which is not deep is its capability of training with larger images. So, the network was built to recognize patterns on images with 4096 input features ((\( 64 \times 64\) pixels). Suppose the input is a (\( 300 \times 300\) RGB image, the first layer of the network has 90000 neurons, and each one is fully connected to the input. That means that each neurone in the previous layer is connected to each node in the following layer. The number of parameters which the training process has to optimize would be calculated with the following formula \cite{Vasudev2019}\cite{DBLP:journals/corr/TraskGR15}.
 
 \begin{definition}[label=cn]{Calculate the total number of neurons in a neuronal network}
 	\begin{align*}
-	& W\textsubscript{ff} = F\textsubscript{-1}\times F \\
-	& B\textsubscript{ff} = F \\
-	& P\textsubscript{ff} = W\textsubscript{ff}\times +  B\textsuperscript{ff}
+		& W\textsubscript{ff} = F\textsubscript{-1}\times F \\
+		& B\textsubscript{ff} = F \\
+		& P\textsubscript{ff} = W\textsubscript{ff}\times +  B\textsubscript{ff}
 	\end{align*}
 	where \\\\
 	\(W\textsubscript{ff}\) = Number of weights of a FC Layer which is connected to an FC Layer \\
@@ -245,26 +225,36 @@ test accuracy: 80.0 %
 	\(F\textsubscript{-1}\) = Number of neurons in the previous FC Layer
 \end{definition}
 
-In the equation above, \( F_{-1} \times F \)is the total number of weights (connections between layers) from neurons of the previous fully connected layer, to the neurons of the current fully connected layer. The total number of biases is the same as the number of neurons (F). So, for the example given above (\( 300 \times 300\) pixels, 100 Layers in the first hidden layer, RGB and fully connected) the calculation would look like this:\\\\
+In the equation above, \( F_{-1} \times F \) is the total number of weights (connections between layers) from neurons of the previous fully connected layer, to the neurons of the current fully connected layer.  The total number of biases is the same as the number of neurons (F). So, for the example given above (\( 300 \times 300\) pixels, 100 Layers in the first hidden layer, RGB and fully connected) the calculation would look like this:\\
 \begin{align*}
-& W\textsubscript{ff} =  270.000 \times 100 = 27.000.000  \\
-& B\textsubscript{ff} = 100 \\
-& P\textsubscript{ff} = W\textsubscript{ff}\times +  B\textsubscript{ff} = 27.000.000 +100 =27.000.100    \\
-& F: = 100 \\
-& F\textsubscript{-1} = 270.000 \text{ (300 x 300 pixels x 3 colour channels})\\
+	& W\textsubscript{ff} =  270000 \times 100 = 27000000  \\
+	& B\textsubscript{ff} = 100 \\
+	& P\textsubscript{ff} = W\textsubscript{ff} +  B\textsubscript{ff} = 27000000 + 100 =27000100    \\
+	& F = 100 \\
+	& F\textsubscript{-1} = 270000  \text{ (300}  \times \text{300 pixels}  \times \text{3 colour channels)}\\
 \end{align*}
-If the picture gets even bigger and the layers get more, you can't optimize the weights with standard hardware, because if you look at the calculation it becomes clear that the number of parameters is much bigger. As a guideline, there are about 14.000.000 parameters where it is still possible to train without special hardware (e.g. on your own computer). Everything above this is difficult to realize on a personal computer without any hardware adjustments.   Besides, the models could not predict in any case in a satisfactory time \cite{DBLP:journals/corr/TraskGR15}. Instead of the introduced neural network, there are particular implementations of deep neural networks that can calculate a forecast more efficiently.\\
 
-The subject of the next section is to determine how to achieve excellent results in a reasonable time, even if the input image is greater than or equal to \( 300 \times 300\) pixels.
+If the image gets even bigger and the amount of layers increases, the weights can not be optimized with standard hardware, because the number of parameters is too big. As a guideline, there are about 14000000000 parameters where it is still possible to train without special hardware (e.g. on your own computer). Everything above this is difficult to realize on a personal computer without any hardware adjustments. Besides, the models could not predict in any case in a pleasant amount of time \cite{DBLP:journals/corr/TraskGR15}. Instead of the introduced neural network, there are particular implementations of deep neural networks that can calculate a forecast more efficiently.\\
+
+The objective of the next section is to determine how to get excellent results in a reasonable time, even if the input images are greater or equal to \( 300 \times 300\) pixels.
+
+\begin{lstlisting}[captionpos=b,label={lst:acc2l}, float=tb,language=Python, caption=Test accuracy is 80\% after iteration 2400 times and using 209 examples with 12288 features (\(64\times64 \) pixels). This is not state of the art but very good if considering that this is an algorihm wich is not spezialised to recoginize images.]
+...
+Cost after iteration 2300: 0.100897
+Cost after iteration 2400: 0.092878
+train accuracy: 98.5645933014 %
+test accuracy: 80.0 %
+\end{lstlisting} 
 
 \subsection{Convolutional Neural Networks}
 \label{subsec:cnn}
 
-The most popular deep learning models leveraged for computer vision problems are convolutional neural networks. To present the \Gls{cnn} (which will be made transparent), the example given at the beginning of this chapter will be changed. Instead of cats, the network shall now recognize ten different digits which are simulated with the hands as you can see in Figure \ref{fig:signs}, where:
+The most popular deep learning models leveraged for computer vision problems are convolutional neural networks. To present the convolutional neural networks, the example given at the beginning of this chapter will be changed. Instead of cats, the network shall now recognize ten different digits which are simulated with the hands as you can see in \hyperref[fig:signs]{Figure \ref{fig:signs}}, where:
 
 \begin{itemize}
+	\itemsep-0.8em 
 	\item \textbf{y} is a vector with the length of the possible outputs, e.g. five-digit imitating means the length of a single output vector would be five \\
-	\item \(\boldsymbol{y\textsubscript{i}}\) is a binary value with determines if the input belongs to a class on the \(i\textsuperscript{th}\) position within the vector\\
+	\item and each element of \textbf{y} is a binary value which determines if the input belongs to a class on the \(i\textsuperscript{th}\) position within the vector\\
 \end{itemize}
 
 \begin{figure}[htp]
@@ -274,9 +264,9 @@ The most popular deep learning models leveraged for computer vision problems are
 	\label{fig:signs}
 \end{figure}
 
-This is a more realistic case  of an upload filter because similar to this, the "Hiterlergruß" gesture or a another forbidden gesticulation can be identified. Even if the strength of a convolutional neural network is to recognize images with high dimensions, the  dimensions will be low as in the example before. The calculation with inputs of higher dimensions takes to long such that it can be trained along this thesis. \cite{DBLP:journals/corr/TraskGR15}\\
+This is a more realistic case of an upload filter because similar to this, the "Hitlergruß" gesture or another forbidden gesticulation can be identified. Even if the strength of a convolutional neural network is to recognize images with high dimensions, the dimensions will be low as in the example before. The calculation with inputs of higher dimensions takes to long such that it can be trained along with this thesis. \cite{DBLP:journals/corr/TraskGR15}\\
 
-Before I used a so-called densely (entirely, fully) connected neural network (Figure \ref{fig:10_process_of_pretictions_for_a_cat_image_two_layers}). The network consists of a certain amount of neurons which are arranged in different layers (Figure \ref{fig:08_process_of_pretictions_for_a_cat_image}). Each neuron is fully connected with the neurons in the previous layer. To see how complex such a network can be, I have visualized a neural network in Figure \ref{fig:signs} . Here you can see that such a network can become complex. Consider that each connection is represented by a weight. This weight has to be initialized and adjusted. If it comes to understand when and why which weight was adjusted to ensure transparency, it becomes clear that such a network can be a confusing issue. 
+Before I used a so-called densely fully connected neural network (Figure \ref{fig:10_process_of_pretictions_for_a_cat_image_two_layers}). The network consists of a certain amount of neurons which are arranged in different layers (Figure \ref{fig:08_process_of_pretictions_for_a_cat_image}). Each neuron is fully connected with the neurons in the previous layer. To see how complex such a network can be,  in Figure \ref{fig:signs} such a network can be seen. The Figure shows that such a network can become complex. Consider that each connection is represented by a weight. This weight has to be initialized and adjusted. If it comes to understand when and why which weight was adjusted to ensure transparency, it becomes clear that such a network can be a confusing issue. 
 
 \begin{figure}[htp]
 	\centering
@@ -285,7 +275,7 @@ Before I used a so-called densely (entirely, fully) connected neural network (Fi
 	\label{fig:signs}
 \end{figure}
 
-More neurons would result in a high amount of parameters if the picture has too many dimensions \cite[p. 324]{Goodfellow-et-al-2016}. So, an alternative approach would be to use the mathematical operation of convolution \footnote{Technically I skip the narrowing operation, so this would be a cross-correlation instead of convolution. Still, as in literature and by convention, I call this a convolutional operation anyway\cite{AndrewNG}}. The convolution makes it possible to detect patterns like edges which could be used to classify an image. If the pictures have edges (patters) which are similar to the kind of edges from another image, the probability is high that it is in the same class. For example, if the algorithms detect a set of edges which are typically for cat ears, the algorithm will probably "think" this picture is a cat. Other cases how extracted patters while using filters can look like you can see in the following:\\\\
+More neurons would result in a high amount of parameters if the image has too many dimensions \cite[p. 324]{Goodfellow-et-al-2016}. An alternative approach would be to use the mathematical operation of convolution \footnote{Technically I skip the narrowing operation, so this would be a cross-correlation instead of convolution. Still, as in literature and by convention, I call this a convolutional operation anyway\cite{AndrewNG}}. The convolution makes it possible to detect patterns like edges which could be used to classify an image. If the images have edges which are similar to the kind of edges from another image, the probability is high that it is in the same class. For example, if the algorithms detect a set of edges which are typically for cat ears, the algorithm will probably consider this image as a cat. Other possibilities of extracted patterns are shown in Figure \ref{fig:edge_detec}.\\\\
 \begin{figure}[htp]
 	\centering
 	\fbox{\includegraphics[width=0.85\linewidth]{photo/13_example_feature_extraction}}
@@ -293,17 +283,17 @@ More neurons would result in a high amount of parameters if the picture has too 
 	\label{fig:edge_detec}
 \end{figure}
 
-Convolution operations are widely spread in computer vision algorithms, so it is not unique for \gls{cnn}. It is a mathematical operation where a small matrix of numbers (filter, kernel, is passed through the matrix image representation. Every colour channel would need its filter. The name filter comes from the fact that it filters specific features from the input image, e.g. horizontal and vertical images. In Figure \ref{fig:edge_detec}, where
+Convolution operations are widely spread in computer vision algorithms, so it is not unique for convolutional neural networks. It is a mathematical operation where a small matrix of numbers is passed through the matrix image representation. This matrix is a so-called filter or kernel. Every colour channel would need its filter. The name filter comes from the fact that it filters specific features from the input image, e.g. horizontal and vertical images. In Figure \ref{fig:edge_detec}, where
 
 \begin{itemize}
 	\item \textbf{*} is the mathematical operation of convolution
 	\item \textbf{X} represents an image with a horizontal edge in the middle of the image
-	\item \textbf{A} = the output matrix (feature map) which shows where the edge is\footnote{because this pictures are very small the dimensions of the edge which is shown in A are not accurate and unprofessionally. While using matrices of higher dimensions the proportions would be more accurate}
+	\item \textbf{A} = the output matrix (feature map) which shows where the edge is\footnote{because this images are very small the dimensions of the edge which is shown in A are not accurate and unprofessionally. While using matrices of higher dimensions the proportions would be more accurate}
 	\item \textbf{f} = a filter for detecting horizontal edges,
 \end{itemize}
 
 you can see how a vertical edge, which is represented by a
-\( 6 \times 6\) matrix X is filtered and represented by a feature map (\( 4 \times 4\) matrix) while using a \( 3 \times 3\) matrix as a filter.
+\( 6 \times 6\) matrix \(X\) is filtered and represented by a matrix while using another \( 3 \times 3\) matrix as a filter.
 
 \begin{figure}[htp]
 	\centering
@@ -312,7 +302,7 @@ you can see how a vertical edge, which is represented by a
 	\label{fig:edge_detec}
 \end{figure}
 
-For a convolution operation, a filter would be placed over a selected pixel. Afterwards, each value from the filter has to be multiplied with the corresponding values from the image. Finally, the sum would be placed in the right place in the feature map as to be shown in Figure \ref{fig:conv}.
+For a convolution operation, a filter would be placed in front of a selected pixel. Afterwards, each value from the filter has to be multiplied with the corresponding values from the image. Finally, the sum would be placed in the right place in the original matrix, as shown in Figure \ref{fig:conv}.
 
 \begin{figure}[htp]
 	\centering
@@ -331,7 +321,7 @@ For a convolution operation, a filter would be placed over a selected pixel. Aft
 \begin{figure}[htp]
 	\centering
 	\fbox{\includegraphics[width=0.85\linewidth]{photo/17_example_verticall_edges_detected.png}}
-	\caption{Convolution Operation on hand gestures, using a filter for horizontal edges and projecting them on the original image (without changing the size of it)}
+	\caption{Convolution Operation on hand gestures, using a filter for vertical edges and projecting them on the original image (without changing the size of it)}
 	\label{fig:vert}
 \end{figure}
 
@@ -342,9 +332,10 @@ For a convolution operation, a filter would be placed over a selected pixel. Aft
 	\label{fig:edges}
 \end{figure}
 
-The algorithms had to use a specific filter matrix, to detect of edges of every kind (e.g. vertical and horizontal edges). Two filters are used to identify at first horizontal edges (Figure \ref{fig:horizontal})and second vertical edges (Figure \ref{fig:vert}). Finally, both edges get projected to the original image and colour values were normalized to show the vertical and horizontal edges more clearly (\ref{fig:edges}). To figure out which values (filters) should be used to detect patterns is challenging because there are almost endless opportunities. That is where the neural network could be used. Instead of setting the filter values manually, they are the parameters of a neural network. These parameters can now be optimized by using the cost function of the network (Definition \ref{def:cost_function}). That means the total amount of parameters comes no longer from the size of an image it came now from the filter size \cite{AndrewNG})\\\\
+The algorithms use a specific filter matrix, to detect of edges of every kind (e.g. vertical and horizontal edges). Two filters are used to identify at first horizontal edges (Figure \ref{fig:horizontal})and second vertical edges (Figure \ref{fig:vert}). Finally, both edges get projected to the original image and colour values were normalized to show the vertical and horizontal edges more clearly (\ref{fig:edges}). To figure out which filters shall be used to detect patterns is challenging because there are almost endless opportunities. That is where the neural network comes into part. Instead of setting the filter values manually, they are the parameters of a neural network. These parameters can now be optimized by using the cost function of the network (Definition \ref{def:cost_function}). That means the total amount of parameters comes no longer from the size of an image it comes now from the filter size \cite{AndrewNG})\\\\
 
-In Figure \ref{fig:archi}, you can see the architecture of such a network which we could use to identify filter values which are finally helping us to classify.
+Figure \ref{fig:archi} shows the architecture of such a network which is used to identify filter values  and finally helps 
+to classify more efficiently.
 
 \begin{figure}[htp]
 	\centering
@@ -353,7 +344,7 @@ In Figure \ref{fig:archi}, you can see the architecture of such a network which 
 	\label{fig:archi}
 \end{figure}
 
-As could be seen in the picture, a convolutional neuronal network contains more than just convolution operations. One example is the \Gls{relu} which is an \glslink{af}{Activation Function} and is used to standardize values between the layers. The softmax \glslink{af}{Activation Function} is used to get probabilities for each possible class. Afterwards, a decision boundary can be decided whether the image belongs to a class or not. The \Gls{pl} reduces the height and width of the input. It helps minimize computations, as well as it helps to make feature detectors more invariant to its position in the input data. Typically a \Gls{pl} is one of the two following types:
+As can be seen in the image, a convolutional neuronal network contains more than just convolution operations. One example is the RelU which is an activation function and is used to standardize values between the layers. The softmax activation function is used to get probabilities for each possible class. Afterwards, a decision boundary can be decided whether the image belongs to a class or not. The pooling layer reduces the height and width of the input. It helps minimize computations, as well as it helps to make feature detectors more invariant to its position in the input data. Typically a pooling layer is one of the two following types:
 
 \begin{itemize}
 	\item Max-pooling uses another matrix which slides over the input and stores the max value of the window in the output.
@@ -378,7 +369,7 @@ In the Figure \ref{fig:avg} \ref{fig:max} you can see how this would be done, wh
 	\label{fig:avg}
 \end{figure}
 
-Using this kind of network with a dataset of ten different classes, the accuracy is close to 80\%\footnote{The result could be even better if we used more data for the training process and a bigger network so that the difference to a usual \Gls{nn} would be more outsanding}.
+This kind of network and a dataset of ten different classes achieve accuracy close to 80\%\footnote{The result could be even better if more training data and a deeper network would be used}.
 
 \begin{lstlisting}[captionpos=b,label={lst:cnn}, float=tb,language=Python, caption=Test accuracy is 80\% after iterations 2400 times and using 209 examples with 12288 features (\(64\times64 \) pixels). That accuracy is not state of the art but very good if considering that this is an algorithm which is not specialized to recognize images.]
 Cost after epoch 0 =    1.917929
@@ -387,49 +378,49 @@ Train Accuracy =    0.940741
 Test Accuracy =    0.783333
 \end{lstlisting}
 
-The state of the art results in image recognition, e.g. on the cifar10\footnote{CIFAR-10  is an established computer-vision dataset used for object recognition. It is a subset of the 80 million tiny images dataset and consists of 60,000 \( 32 \times 32\) colour images containing one of 10 object classes, with 6000 images per class. Alex Krizhevsky, Vinod Nair collected it, and Geoffrey Hinton.} dataset, are impressive examples of how this technique has increased the performance of machine learning in the last year. They were achieve results of 90\% and can be calculated in a pleasing amount of time.\\
+The state of the art results in image recognition, e.g. on the cifar10\footnote{CIFAR-10  is an established computer-vision dataset used for object recognition. It is a subset of the 80 million tiny images dataset and consists of 60,000 \( 32 \times 32\) colour images containing one of 10 object classes, with 6000 images per class. Alex Krizhevsky, Vinod Nair collected it, and Geoffrey Hinton.} dataset, are impressive examples of how this technique has increased the performance of machine learning in the last years. They achieve results of 90\% and can be computed within a pleasant amount of time.\\
 
-However, because of their non-linear structure, convolutional neural network algorithms with outstanding overall performance are usually seen as a black box. That means no information is provided about what exactly lead the networks to their conclusion. Transferred to the \gls{ul} example, this would imply that 10\% of the users are blocked more falsely during the uploading.  The user could not be informed about why the algorithm came to its decision.\\
+However, because of their non-linear structure, convolutional neural network algorithms with outstanding overall performance are usually seen as a black box. That means no information is provided about what exactly lead the networks to their conclusion. Transferred to the Instagram upload filter example, this would imply that 10\% of the users are blocked more falsely during the uploading.  The user will not be informed about why the algorithm came to its decision.\\
 
-The goal of the next section is to present the theory of different methods of how a convolutional neural network is no longer a black box but a transparent algorithm. In other words, a decision support system from which the user can be informed of why the algorithm came to a specific decision.
+The goal of the next section is to present the theory of different methods of how a convolutional neural network behave more like a white-box model. In other words, a decision support system from which the user can be informed of why the algorithm came to a specific decision.
 
 \section{Explainable Artificial Intelligence}
-Most \gls{dl} Models today are a black-box. Especially no counteraction is set to make them transparent. To in non-transparent models, techniques have arisen to understand feature importance. That means for a given prediction, how important is each input feature value to that prediction? Before two of these techniques are explained in detail, why this is important is summarized.\\
+Most deep learning models today are black-box. That means no counteraction is set to make them transparent. Within the last years, techniques have arisen, which help to make those models more transparent. That means for a given prediction, how important is each input feature value to that prediction? Before two of these techniques are get explained in detail, it will be demonstrated one more time why this is so important.\\
 
-Since Deep Learning has become more and more successful, science is also increasingly concerned with how to make Deep Learning models more transparent. The reason for that is that for business leaders, machine learning engineers and the users who are confronted by the results produced by machine learning algorithms, it is essential to know why a decision was made. Unless we were not able to learn from the model and they will become a black box \cite{MichaelJordan2018} \cite{Kuang2017}.\\
+Since deep learning has become more and more successful, science is also increasingly concerned with how to make deep learning models more transparent. For business leaders, machine learning engineers and the users who are confronted by the results, it is essential to know why a decision was made. Unless we were not able to learn from these models and they will still be a black box \cite{MichaelJordan2018} \cite{Kuang2017}.\\
 
-In Figure \ref{fig:xai-old-vs-new} you can see what the difference between a traditional explanation approach within a \Gls{ml} System and an \Gls{xai} explanation is. Whereas the traditional approach focuses on the output itself (e.g. this is a cat) the \Gls{xai} approach combines some features to an explanation which can be understood by humans (e.g. has fur, whiskers and claws).\\
+Figure \ref{fig:xai-old-vs-new} shows the difference between a traditional machine learning model and an explainable artificial intelligence model. Whereas the traditional approach focuses on the output itself (e.g. this is a cat) the explainable approach combines some features to an explanation which can be understood by humans (e.g. has fur, whiskers and claws).\\
 
 \begin{figure}[htp]
 	\centering
 	\fbox{\includegraphics[width=0.85\linewidth]{photo/22_what_is_xai}}
-	\caption{This is a cat, but how do you know? \Gls{xai} seeks to develop systems that can translate complex algorithmic decision-making into language humans can understand.\cite{Robinson2017}}
+	\caption{This is a cat, but how do you know? Explainable artificial intelligence seeks to develop systems that can translate complex algorithmic decision-making into language humans can understand.\cite{Robinson2017}}
 	\label{fig:xai-old-vs-new}
 \end{figure}
 
-Managers with a high responsibility for there department find it challenging to use these complex algorithms. Although they are aware that the results could increase the success of their company, they are afraid of using these models, because they are not transparent. If something goes wrong, they can hardly explain why the algorithm made the wrong decision. The results created by deep learning in image recognition could be beneficial for the healthcare sector as well, but if it is unclear why decisions were made, doctors will not give those approach any chance. As well as the Managers doctors are responsible for their decisions, and if they get supported by an algorithm, they must understand the algorithm in the first place. Otherwise, they could not trust them, because they would not be able to distinguish between a right and a wrong decision.\\
+Managers with a high responsibility for there department find it challenging to use these complex algorithms. Although they are aware that the results could increase the success of their company, they are afraid of using these models, because they are not transparent. If something goes wrong, they can hardly explain why the algorithm made the wrong decision. The results created by deep learning in image recognition could be beneficial for the healthcare sector as well, but if it is unclear why decisions were made, doctors will not give these approaches any chance. As well as the manager's doctors are responsible for their decisions, and if they get supported by an algorithm, they must understand the algorithm in the first place. Otherwise, they could not trust them, because they would not be able to distinguish between a right and a wrong decision.\\
 
-A lack of transparency is responsible for the rejection of deep learning models in the finance industry as well. Especially since the last big financial crisis in 2009 banks und financial companies must make their decisions transparent to different stakeholders. And as already introduced in my introduction, small business owners could be affected by semitransparent models as well. If they run their business with the help of social media, it would harm them if their uploads get rejected automatically, without even knowing why this decision would be made.\\
+A lack of transparency is responsible for the rejection of deep learning models in the finance industry as well. Especially since the last big financial crisis in 2009, banks and financial companies must make their decisions transparent to different stakeholders. And as already introduced in the introduction, small business owners could be affected by semitransparent models as well. If they run their business with the help of social media, it would harm them if their uploads get rejected automatically, without even knowing why this decision was made.\\
 
-More specifically a small shop owner wants to upload a picture which shows him, introducing a new product. The algorithm was trained to detect the "Hitlergruß", and so he predicted the user performs this gesture. So, \gls{xai} would help to explain automatically why this prediction would be made. Thus, the shop owner could change the crucial factors immediately.\\\\
+More specifically, a small shop owner wants to upload an image which shows him, introducing a new product. The algorithm was trained to detect the "Hitlergruß", and so he predicted the user performs this gesture. So, explainable artificial intelligence would help to explain automatically why this prediction would be made. Thus, the shop owner could change the crucial factors immediately.\\\\
 
-Now I will dive deeper into two techniques which could be used in an upload filter. This could help the shop owner from the example given in the paragraph above. These two techniques are \cite{Kuang2017}:
+The following sections will focus on two techniques which could be used in an upload filter. This could help the shop owner from the example given in the paragraph above. These two techniques are \cite{Kuang2017}:
 
 \begin{enumerate}
 	\item Shapely Additive exPlanations (SHAP) and
 	\item Integrated Gradients (IG)
 \end{enumerate}
 
-The Shapley Additive exPlanations and the Integrated Gradients (IG) belong to two different categories for \gls{xai}. 
+The Shapley Additive exPlanations and the Integrated Gradients (IG) belong to two different categories for explainable artificial intelligence. 
 
 \begin{enumerate}
 	\item Shapley-value-based algorithms and 
 	\item gradient-based algorithms 
 \end{enumerate}
 
-Two factors can easily distinguish these models. Firstly, the assumptions and secondly, the underlying mathematical principles used in the models. Before I am going to explain how they differ, I present the fundamentals of categories. Next chapters focus on the question which approaches  used in the prototype, based on the requirements for the prototype \cite{MichaelJordan2018} \cite{Kuang2017}.\\
+Two factors can easily distinguish these models. Firstly, the assumptions and secondly, the underlying mathematical principles used in the models. Before it is explained how they differ, the fundamentals of each category will be explained.\\
 
-The two fundamentals of the shapely-value-based algorithms and gradient-based algorithms are:
+The two fundamentals of the shapely-value-based algorithms and gradient-based algorithms are \cite{MichaelJordan2018} \cite{Kuang2017}:
 
 \begin{enumerate}
 	\item Shapley Values
@@ -438,7 +429,7 @@ The two fundamentals of the shapely-value-based algorithms and gradient-based al
 
 \subsection*{Shapley Values}
 
-Let assume that the algorithm behind an upload filter predicts the price for a painting. For a particular painting, it predicts € 300,000, and the prediction will be explained through shapely values. The art has an age of 50 years, is part of a private collection, is not mentioned in literature and is in good shape (Figure \ref{fig:shapley_values_example_01}).\\
+Let assume that the algorithm behind an upload filter predicts the price for a painting. For a particular painting, it predicts 300000€, and the prediction will be explained through shapely values. The art has an age of 50 years, is part of a private collection, is not mentioned in literature and is in good shape (Figure \ref{fig:shapley_values_example_01}).\\
 
 \begin{figure}[!htp]
 	\centering
@@ -447,22 +438,22 @@ Let assume that the algorithm behind an upload filter predicts the price for a p
 	\label{fig:shapley_values_example_01}
 \end{figure}
 
-The average prediction for all paintings is €310,000. Now the question "How much has each feature value contributed to the prediction compared to the average prediction?" For that, quantitative criteria will be used.
+The average prediction for all paintings is 310000€. Now the question is how much has each feature value contributed to the prediction compared to the average prediction? For that, quantitative criteria will be used.
 
 For a linear regression model, the answer is quite simple. The attribute of each feature is the weight of the feature times the feature value. It works because linear regression is a linear model. So, to make more complex models (e.g. deep learning, convolutional neural networks) transparent, a different solution is required. The Shapley value, coined by Shapley (1953), is a method for assigning payouts to players depending on their contribution to the total payout. Players cooperate in a coalition and receive a certain profit from this cooperation \cite{aas2019explaining} \cite{Lundberg} \cite{ScottM}.
 
-As we had not a real "game", the "game" is the prediction task for a single instance of the dataset. The "gain" is the actual prediction for this instance, minus the average prediction for all instances. The "players" are the feature values of the instance that collaborate to receive the gain (= predict the price for the painting). In the example, the feature values "Not mentioned in the literature, "painting is in good shape", "painting is 50 years old" and "painting is part of a private collection" worked together to achieve the prediction of €300,000. Our goal is to explain the difference between the actual prediction (€300,000) and the average prediction (€310,000): a difference of -€10,000.
+Because this is not a real game, the game is the prediction task for a single instance of the dataset. Therefore the gain is the actual prediction for this instance, minus the average prediction for all instances. The players are the feature values of the instance that collaborate to receive the gain (predict the price for the painting). In the example, the feature values "Not mentioned in the literature, "painting is in good shape", "painting is 50 years old" and "painting is part of a private collection" worked together to achieve the prediction of 300000€. Our goal is to explain the difference between the actual prediction (300000€) and the average prediction (310000€): a difference of -10000€.
 
 An answer looks like the following:
 
 \begin{itemize}
-	\item "Not mentioned in literature" feature contributed  € 30,000
-	\item "50 years old" feature contributed € 10,000
-	\item "Part of a private collection" feature contributed € 0
-	\item "Paining is in a good shape" feature contributed -€ 50,000
+	\item "Not mentioned in literature" feature contributed  30000€
+	\item "50 years old" feature contributed 10000€
+	\item "Part of a private collection" feature contributed 0€
+	\item "Paining is in good shape" feature contributed 50000€
 \end{itemize}
 
-The contributions add up to -€10,000, the final prediction minus the average predicted apartment price.
+The contributions add up to 10000€, the final prediction minus the average predicted apartment price.
 
 How do we calculate The Shapley value for one feature gets calculated the follows. The Shapley value is the average minimal contribution of a feature value among all possible coalitions.\\
 
@@ -473,38 +464,38 @@ How do we calculate The Shapley value for one feature gets calculated the follow
 	\label{fig:shapley_values_example_01}
 \end{figure}
 
-In the following  we evaluate the contribution of the "Painting is in good shape" feature value when it is added to a coalition of "Not mentioned in literature" and "50 years old"."Not mentioned in literature", "Painting is in good shape", and 50-years old" feature values are from the given predicted instance (painting with a worth of €300,000 ). The feature value for whether a painting is or is not in a private collection came from a random choice among all possible paintings which are in the same distribution. So, the value "in private collection" was replaced from yes by no. If the price of the painting gets now predicted again (with this combination), the predicted price is €310,000. In a second step, the "in good shape" feature value get doped from the coalition by replacing it with a random value among all other possible paintings which can be predicted. In the example, it was not in good shape, but it could have been good shape again. The prediction of the painting price for the coalition of "mentioned in literature" and "50 years old" is €320,000. The contribution of "In Good Shape" was:
+In the following  we evaluate the contribution of the "Painting is in good shape" feature value when it is added to a coalition of "Not mentioned in literature" and "50 years old"."Not mentioned in literature", "Painting is in good shape", and 50-years old" feature values are from the given predicted instance (painting with a worth of 300000€). The feature value for whether a painting is or is not in a private collection came from a random choice among all possible paintings which are in the same distribution. So, the value "in private collection" was replaced from yes by no. If the price of the painting gets now predicted again (with this combination), the predicted price is 310000€. In a second step, the "in good shape" feature value get doped from the coalition by replacing it with a random value among all other possible paintings which can be predicted. In the example, it was not in good shape, but it could have been good shape again. The prediction of the painting price for the coalition of "mentioned in literature" and "50 years old" is 320000€. The contribution of "In Good Shape" was:
 
 \begin{quote}
 	\centering
-	€ 310,000 - €320,000 = -€10.000
+	310,000€ - 320000€ = -10000€
 \end{quote} 
 
-This estimate depends on the values of the randomly drawn painting that served as a “donor” for the "shape" and "private" feature values. We will get better estimates if we repeat this sampling step and average the contributions. The result is even better if the sampling step gets repeated and calculate the average of all contributions. Furthermore, it is done repeatedly computing all coalitions. Because of the repeatedly computing for every combination, the calculation time increases exponentially. One solution to keep the computation time small is to calculate contributions for only a few samples of the possible coalitions.\\
+This estimate depends on the values of the randomly drawn painting that served as a “donor” for the "shape" and "private" feature values. We will get better estimates if we repeat this sampling step and average the contributions. The result is even better if the sampling step gets repeated and calculate and calculate the average of all contributions. Furthermore, it is done repeatedly computing all coalitions. Because of the repeatedly computing for every combination, the calculation time increases exponentially. One solution to keep the computation time small is to calculate contributions for only a few samples of the possible coalitions.\\
 
 If we estimate the Shapley values for all feature values, we get the complete distribution of the prediction (minus the average) among the feature values.
 
 \subsection*{SHalpey Additive exPlanations (shap-software-library)}
-If Shapley values are a method which maps a contribution to each player, a Shapley-value-based explanation method will aim to get estimated shapely values which are close to the precisely calculable ones. It is achieved because the Shapley Additive Explanations are randomly dropping out some of the features. Potentially any combination of features can be left out. As long as you look at each feature individually, there is an almost infinite number of combinations. A calculation would take too long. As a counteraction, pairs of features are formed and in the following considered as one player. The individual success of a player is then estimated. Let us look again at the example of the shop owner. If a group of pixels (subset) does not contribute to the overall result of the game (Accuracy), it will not change even if you drop out the whole group \cite{ScottM} \cite{molnar2019} \cite{Lundberg}.\\
+If Shapley values are a method which maps a contribution to each player, a Shapley value-based explanation method will aim to get estimated shapely values which are close to the precisely calculable ones. It is achieved because the Shapley Additive Explanations are randomly dropping out some of the features. Potentially any combination of features can be left out. As long as you look at each feature individually, there is an almost infinite number of combinations. A calculation would take too long. As a counteraction, pairs of features are put together and in the following considered as one player. The individual success of a player is then estimated. Let us look again at the example of the shop owner. If a group of pixels does not contribute to the overall result of the game, it will not change even if you drop out the whole group \cite{ScottM} \cite{molnar2019} \cite{Lundberg}.\\
 
 \begin{figure}[!htp]
 	\centering
 	\fbox{\includegraphics[width=0.8\linewidth]{photo/43_shap_library_example.png}}
-	\caption{The Header of the SHAP Github Repoitory shows an example of a \gls{mla} is explained through the library. It takes a model with age, sex, bp and bmi as feature examples and maps an attribute to this values. Each values showsthe average marginal contribution of a feature value across all possible coalitions of features.}
+	\caption{The header of the SHAP Github Repoitory shows an example of a \gls{mla} is explained through the library. It takes a model with age, sex, bp and bmi as feature examples and maps an attribute to this values. Each values showsthe average marginal contribution of a feature value across all possible coalitions of features.}
 	\label{fig:shap_library_example}
 \end{figure}
 
-Figure \ref{fig:shap_library_example} shows an easy example of how the shap library explains the feature importance with a \gls{mla}. The colours help to get an intuitive understanding of which features is more important, so red stand for significant contribution to the overall prediction (on average) there as blue is less important to it. 
+Figure \ref{fig:shap_library_example} shows an easy example of how the shape library explains the feature importance of a machine learning model. The colours help to get an intuitive understanding of which features are more important, so red stands for significant contribution to the overall prediction, and blue is less important to it. 
 
 \subsection*{Gradient and Gradient Decent}
 \label{sec:gd}
-Even dough I said before I will not go into details about optimization I have to give some theory about the gradient and the gradient descent if it comes to a \gls{xai} method which is built on top of the gradient and the gradient descent.\\
+I have to give some theory about the gradient and the gradient descent if it comes to an explainable artificial intelligence method which is built on top of the gradient and the gradient descent.\\
 
-Gradient Descent is possibly the most used optimization algorithm in the field of deep learning and machine learning. If there would be a cost function as introduced in the section about Machine Learning (e.g. which maps a value of how good a model can predict if an image belongs to the class "Hiterlergruß"). The goal would be to find the optimum for every weight in the model. So, the cost value would be as small as possible (value determines the percentage of failure) as long as the value is not adapting to a specific set of examples (remembering, overfitting). The gradient descent is an algorithm that optimizes the cost value by making changes to the weights. The difference is determined by the gradient, which shows the direction of the deepest decent. In other words, it is a value which determines a direction which minimizes the cost as few \gls{bp} steps as possible. So, whereas in the so-called forward propagation the actual cost would be calculated the backpropagation would use the chain rule to get the gradient at first and at second adjusts the weights by subtracting the gradient from them \cite{Goodfellow-et-al-2016}.\\
+Gradient descent is possibly the most used optimization algorithm in the field of deep learning and machine learning. If there would be a cost function as introduced in the section about machine learning, the goal is to find the optimum for every weight in the model. So, the cost value would be as small as possible as long as the value is not adapting to a specific set of examples. The gradient descent is an algorithm that optimizes the cost value by making changes to the weights. The difference is determined by the gradient, which shows the direction of the deepest decent. In other words, it is a value which determines a direction which minimizes the cost in as few backpropagation steps as possible. Whereas in the so-called forward propagation the actual cost is calculated the backpropagation uses the chain rule to get the gradient at first and at second adjusts the weights by subtracting the gradient multiplied by the learning rate from them \cite{Goodfellow-et-al-2016}.\\
 
 This method is quite old, and one of the reasons why this method got popular in the last years was the increase in computation power. Until a few years, a new generation of computational processing units and graphical procession units are fast enough to work on such tasks efficiently. \\
 
-In Figure \ref{fig:gd}, you can see the graph of a cost function in three-dimensional space. The line shows the line from a starting point by going down to a local minimum. It is crucial to know that gradient descent can not distinguish between a local and a global minimum. Therefore it would need different steps of gradient descent. In practice, this is not important because it works for most cases just fine enough. For a  field where very high accuracy is a must, machine learning would be the wrong approach anyway. Therefore a logic-based attempt would lead to a state of the art results \cite{Russell} \cite{conf/mkm/KohlhaseKMT17}. 
+Figure shows\ref{fig:gd}, the graph of a cost function in three-dimensional space. The line shows the line from a starting point by going down to a local minimum. It is crucial to know that gradient descent can not distinguish between a local and a global minimum. Therefore it would need different steps of gradient descent. In practice, this is not important because it works for most cases just fine enough. For a  field where very high accuracy is a must, this kind of machine learning would be the wrong approach anyway. Therefore a logic-based attempt would lead to a state of the art result \cite{Russell} \cite{conf/mkm/KohlhaseKMT17}. 
 
 \begin{figure}[htp]
 	\centering
@@ -518,9 +509,9 @@ In Figure \ref{fig:gd}, you can see the graph of a cost function in three-dimens
 
 A gradient-based explanation method tries to explain a given prediction by using the gradient of the output concerning the input features. The gradient is not only used here to optimize the weights of the parameters but also to see which features have been adjusted the most and are therefore most important. \\
 
-The goal is to know how a decision was made. So it can be concluded afterwards why this decision was made, so the gradient is used again. As already mentioned, the gradient points (for each parameter) in the direction of the next local minimum. So if we know which parameters are adjusted more than others, we can make a statement which parameters are more important than others. Since each parameter is assigned to an input value, it can be concluded how significant this value is to reach the desired minimum as fast as possible. As also mentioned above, an efficient implementation of \gls{mla} is essential to save computing power. An exact calculation costs an enormous amount of resources, which is why the gradients are not calculated in this step but estimated \cite{molnar2019} \cite{TjoaGuan} \cite{Mukund}.\\
+The goal is to know how a decision was made. So it can be concluded afterwards why this decision was made, so the gradient is used again. As already mentioned, the gradient points in the direction of the next local minimum for each parameter. If it is observable which parameters are adjusted more than others, a statement which parameters are more important than others can be made. Since each parameter is assigned to an input value, it can be concluded how important this value is to reach the desired minimum as fast as possible. An efficient implementation of a deep learning approach is essential to save computing power. An exact calculation costs an enormous amount of resources, which is why the gradients are not calculated in this step but estimated \cite{molnar2019} \cite{TjoaGuan} \cite{Mukund}.\\
 
-Figure \ref{fig:ig} shows three paths between a baseline (r1 , r2) and an input (s1, s2). Path P2, used by Integrated Gradients, simultaneously moves all features from off to on. Path P1 moves along the edges, turning features on in sequence. Other paths like P1 along different edges correspond to different sequences. SHAP computes the expected attribution over all such edge paths like P1.\\
+Figure \ref{fig:ig} shows three paths between a baseline (r1 , r2) and an input (s1, s2). Path P2, used by integrated gradients, simultaneously moves all features from off to on. Path P1 moves along the edges, turning features on in sequence. Other paths like P1 along different edges correspond to different sequences. SHAP computes the expected attribution over all such edge paths like P1.\\
 
 \begin{figure}[htp]
 	\centering
@@ -529,16 +520,16 @@ Figure \ref{fig:ig} shows three paths between a baseline (r1 , r2) and an input 
 	\label{fig:ig}
 \end{figure}
 
-The Integrated Gradient tries to estimate Aumann-Shapley values which are as close as possible to the calculated values. The Integrated Gradient works by assuming there is a straight line, from the actual input (e.g. the image of a shop owner which tires of uploading it to Instagram) to a specific baseline input (e.g. a black image). The gradient of the prediction concerning input features would be integrated along this path \cite{Mukund}.\\
-Integrated Gradient is also a method where the input varies along a straight line between the baseline and the input. At the same time, the prediction moves from uncertainty to certainty (the final result, e.g. for 98\% the image shows the "Hiterlergruß"). At each\label{key} point on this path, the gradient is used to attribute the change in the prediction probability back to the input features. So, Integrated Gradient aggregates these gradients along the using the paths integral \cite{mudrakarta-etal-2018-model}.
-Figure \ref{fig:igiu} visualizes who this method would look like after applying it to a few examples. To make it more clear how this would be done, it now it will be described it step by step :
+The integrated gradient approach tries to estimate Aumann-Shapley values which are as close as possible to the calculated values. The integrated gradient works by assuming there is a straight line, from the actual input (e.g. the image of a shop owner which tires of uploading it to Instagram) to a specific baseline input (e.g. a black image). The gradient of the prediction concerning input features would be integrated along this path \cite{Mukund}.\\
+The integrated gradient is also a method where the input varies along a straight line between the baseline and the input. At the same time, the prediction moves from uncertainty to certainty (the final result, e.g. for 98\% the image shows the "Hiterlergruß". At each point on this path, the gradient is used to attribute the change in the prediction probability back to the input features. So, integrated gradient aggregates these gradients along the paths integral \cite{mudrakarta-etal-2018-model}.
+Figure \ref{fig:igiu} visualizes who this method would look like after applying it to a few examples.
 
 \begin{enumerate}
-	\item Choose any image as a baseline (e.g. black picture with each pixel 0) 
+	\item Choose any image as a baseline (e.g. black image with each pixel 0) 
 	\item Make images brighter as long as they become the input again  (Figure \ref{fig:step2})
 	\item Compare the final output (as moving from certainty to uncertainty) to the path of the images (from the black baseline to the input, Figure \ref{fig:step3}) 
 	\item We want to know then the slope of the score vs intensity graph doesn't remain stagnant (Interesting Gradients)
-	\item The Input pictures get changed such that the interesting gradients can be seen in there (Figure \ref{fig:step5})
+	\item The Input images get changed such that the interesting gradients can be seen in there (Figure \ref{fig:step5})
 \end{enumerate}
 
 \begin{figure}[!htp]
@@ -562,26 +553,26 @@ Figure \ref{fig:igiu} visualizes who this method would look like after applying 
 	\label{fig:step5}
 \end{figure}
 
-As the Integrated Gradient approximates Aumann-Sapley values the function which estimates the values must be a piecewise differentiable function of the input features (compare Shapley Values).\\
+As the Integrated Gradient approximates Aumann-Sapley values the function which estimates the values must be a piecewise differentiable function of the input features.\\
 
-Because the Method should make sensible feature attributions to chose a suited baseline is crucial. For example, if a black image is selected as a baseline, integrated Gradient would not choose attribute importance to a completely black pixel in an actual image. If black pixels are not necessary, e.g. because just the frame of the shop owners image is black and the rest of the image is only bright, this will work perfectly fine. But in general (because such an assumption could not be made in a real-world-scenario) the baseline value should both have a near-zero prediction, and also faithfully represent a complete absence of signal.\\
+Because the method should make sensible feature attributions a sufficient baseline is crucial. For example, if a black image is selected as a baseline, the integrated gradient would not choose attribute importance to a completely black pixel in an actual image. If black pixels are not necessary, e.g. because just the frame of the shop owners image is black and the rest of the image is only bright, this will work perfectly fine. But in general, the baseline value should both have a near-zero prediction, and also faithfully represent a complete absence of signal.\\ 
 
 \begin{figure}[htp]
 	\centering
 	\fbox{\includegraphics[width=0.85\linewidth]{photo/30_integradet_gradient_step_4}}
-	\caption{The Integrated Gradient applied to sample of images and visualized to demonstrate which pixels are important (brighter) and which pixels are less important (darker)}
+	\caption{The integrated gradient applied to sample of images and visualized to demonstrate which pixels are important (brighter) and which pixels are less important (darker)}
 	\label{fig:igiu}
 \end{figure}
 
 \subsection{Expected Gradient Approach}
 \label{subsec:expected_gradient_approach}
-The Expected Gradient Approach combines the two methods which were described above. It is useful because the two approaches above generate noisy data as can be seen later on in the prototype. While in the two methods above, one single example is used as a reference value. This approach allows using the whole dataset. It makes the resulting values easier to interpret. 
+The expected Gradient Approach combines the two methods which were described above. It is useful because the two approaches above generate noisy data. While in the two methods above, one single example is used as a reference value. This approach allows using the whole dataset. It makes the resulting values easier to interpret. 
 
-It tries to combine a multitude of ideas from Integrated Gradients, SHapley Additive exPlanations (SHAP) and libraries such as SHAP-Library implement some brilliant approximations and samplings. To cover up all their work fils an entries Mater Thesis with ease so this part is left out. Important to understand is the result which is provided by Software-Library such that it can be interpreted later on the course of this thesis.
+It tries to combine a multitude of ideas from integrated Gradients, SHapley Additive exPlanations (SHAP) and libraries such as SHAP-Library implement some brilliant approximations and samplings. To cover up all their work would fill an entire mater thesis with ease so this part is left out. Important to understand is the result which is provided by software library such that it can be interpreted later on the course of this thesis.
 
-An intuitive way to understand the Expected Gradient Values is following illustration: The feature values are chef which are entering a hotel kitchen step by step in random order. All chefs (feature values) in the room contributing to the lunch (= contribute to the prediction, which is predicted by a machine learning model). The Expected Gradient Values are marks for the meal which got prepared in the kitchen. This value is the average change in the grading. That mentioned change is defined as follow: Grade revived by a combination of cooks which are already in the kitchen if the actual chef is entering. More precisely, the average of all different combinations of chefs witch is in the kitchen, while the specific chef comes into the kitchen. 
+An intuitive way to understand the expected gradient values is following illustration: The feature values are chefs who are entering a hotel kitchen step by step in random order. All chefs (feature values) in the room contributing to the lunch (= contribute to the prediction, which is predicted by a machine learning model). The expected gradient values are equal in the same grade given for the meal which got prepared in the kitchen. This value is the average change in the grading. That mentioned change is defined as follow: Grade revived by a combination of cooks which are already in the kitchen if the actual chef is entering. More precisely, the average of all different combinations of chefs which are in the kitchen, while the specific chef comes into the kitchen. 
 
-Figure \ref{fig:gradient_imagenet_plot} shows how this can be visualized on an overlay on image predictions. Especially, it can be seen which regions on the image are responsible for the predicted probability of bing part of a class (red) or not (blue). 
+Figure \ref{fig:gradient_imagenet_plot} shows how this can be visualized on an overlay on image predictions. Especially, it can be seen which regions on the image are responsible for the predicted probability of being part of a class (red) or not (blue). 
 
 \begin{figure}[htp]
 	\centering
@@ -589,4 +580,3 @@ Figure \ref{fig:gradient_imagenet_plot} shows how this can be visualized on an o
 	\caption{The shap applied to sample of images and visualized to demonstrate which pixels are important (red) and which pixels are less important (blue) \cite{shaoshan91:online}}
 	\label{fig:gradient_imagenet_plot}
 \end{figure}
-

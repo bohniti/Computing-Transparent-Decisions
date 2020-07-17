@@ -1,23 +1,167 @@
-
 % !TeX spellcheck = en_GB
 % !TeX encoding = UTF-8
+
 \chapter{Functional Specifications}
 \label{ch:functional_specifications}
-\epigraph{“Details matter. It’s worth waiting to get it right.”}{- Steve Jobs, Found of Apple}
+\epigraph{“Details matter. It’s worth waiting to get it right.”}{- Steve Jobs}
+
+This chapter is divided into five sections. 
+\begin{enumerate}
+	\item The first section is a brief overview of the data set, which will be used within the prototype implementation. In this section, the decision for a particular dataset is clearly explained. Furthermore, the flow of the data will be introduced. 
+	\item The purpose of the second section is to describe different approaches and alternatives when it comes to split a dataset. The prototypes dataset is divided into separate parts for training, validation and testing.
+	\item Within the third section, the so-called VGG16 architecture will be explained in greater detail. 
+	\item How a model came to its decisions is related to the topic loss functions and the gradient. Because this was already addressed in the associated theory section, a detailed explanation will be left out. Instead, this section elaborates details for pre-trained model implementations. The prototype uses pre-trained networks to make its predictions, and this section explains how exactly this can be done. 
+	\item To make decisions transparent, the prototype uses the SHAP library, which is introduced in the theory section as well. This chapter summarizes the theory part. It also introduces other methods and explains why SHAP is used to get the defined requirements of a transparent decision. 
+\end{enumerate}
+
+The five sections are related to the five steps, which are introduced at the end of the requirements chapter. Moreover, it is strongly related to the theoretical part of this thesis. The overall intention is to apply the given knowledge practically, by using the prototype implementation.
 
 \section{Input Data}
 \label{sec:input_data}
 
+The dataset "cats vs dogs" is used as an input dataset because it is one of the most rapid ways to enter the field of image recognition. Furthermore, the decision is based on a quantitative approach. The CIFAR-10, CIFAR-100 and the "cats vs dogs"  datasets are compared on their size:
+
+\begin{itemize}
+	\item The CIFAR-10 dataset consists of 60000 32\(\times\)32 colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images.
+	\item The CIFAR-100 dataset is just like the CIFAR-10, except it has 100 classes instead of 10. The classes are containing 600 images each. There are 500 training images and 100 testing images per class. The 100 classes in the CIFAR-100 are grouped into 20 superclasses. Each image comes with a "fine"  and the superclass to which it belongs.
+	\item The training archive contains 25000 images of dogs and cats. The resolution of the images is quite different.
+\end{itemize}
+
+Because the total amount of images and their resolution is different, total download size and the total amount of possible results are compared. Because the bullet points are not very clear, the following illustration shall present the information precisely and allows to apply a quantitative approach on the given datasets: 
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/47_data-set-quantative.png}}
+	\caption{The "cats vs dogs" dataset is much bigger than the CIFAR-10 and CIFAR-100 dataset  (left). The possible results for the CIFAR-10 and CIFAR-100 are much more as in "cats vs dogs" (mid). If the size and the potential outcomes are put in relation to each other, it can be seen that "cats vs dogs" dataset offer the most substantial amount of sample data per class. According to the course of dimensionality, is the "cats vs dogs" dataset the right choice (right).}
+	\label{fig:47_data-set-quantative}
+\end{figure}
+
+As mentioned in the theory chapter and the requirements chapter, the total size and the number of classes matters, if it comes to choosing a handy dataset. Usually, the number of classes is way more important as the total size of examples. This is true as long as this size is not too big. This is why the "cats vs dogs" dataset is the best fit for the prototype. Another reason to choose the "cats vs dogs" dataset is the course of dimensionality. In a Nutshell, if the feature space of an image recognition task is quite big, it leads to better results if more input data is available. As can be seen on the right plot in Figure \ref{fig:47_data-set-quantative}, the "cats vs dogs" dataset has more data per class (measured in consumed storage space per class). A few samples of the prototypes input dataset can be seen in Figure \ref{fig:38_to_predict_images.png}. The images are not in high definition. This is good because otherwise the total amount of features (pixels) is just too big and must be scaled anyways in order to ensure a suitable training time on a personal computer. 
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=1\linewidth]{photo/38_to_predict_images.png}}
+	\caption{Example records from the "cats vs dogs" dataset. The pictures have already been scaled (compare IT concept).}
+	\label{fig:38_to_predict_images.png}
+\end{figure}
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/46_data_model}}
+	\caption{
+		If the data is loaded (1) it will be decided into subsets afterwards (2). With the help of the training and validation subset, a deep neural network gets adjusted as long as it fits the training and testing data (3). Afterwards, the model gets tested of its ability to make predictions on the test subset (4). Finally, the model and the results will be used to make transparent decisions (5).}
+	\label{fig:46_data_model}
+\end{figure}
+
+Last but not least, Figure \ref{fig:46_data_model}  visualizes the data flow within the prototype implementation. It shows the flow from a non-technical point of view. At first, the data gets loaded from a web host (1). At second, the dataset will be divided into different subsets (2). Each for testing, training and validation of the prototypes deep learning model. The input data comes in as "images" represented by a matrix as already explained in the section about \hyperref[subsec:cnn]{convolutional neural networks (Section \ref{subsec:cnn})}.  The validation is everyday praxis among the implementation of deep learning models. It turns out it is better to test a network twice. Once on unseen data after the model is trained (4). And twice with the validation subset, the model will be tested after each iteration (3). This allows stopping the iteration process of adjusting the wights before it comes to an overfit. The validation dataset influences the model. It is essential to know that validation can not be seen as a real test. 
+
 \section{Scale the Data}
 \label{sec:Scaling_the_data}
+
+As mentioned in the theory chapter, usually the data will be split into two subsets: a test set and trainset and sometimes to three: training set, validate set and test set. The model's weights are adjusted on the training data. The test set is used to make predictions on unseen data. When this is done, one of two things might happen: the model is overfitted or underfitted. Within the prototype implementation, it is important to avoid over and underfitting. In order to achieve that, the dataset is divided into three subsets. As can be seen in Figure \ref{fig:48_pie_chart}, the training set is by far the largest one. The validation and training set is relatively small. 
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/48_pie_chart}}
+	\caption{
+		The Figure visualizes how the data for my prototype implementation is divided into different parts. The training set is by far the most enormous one. The validation and training set is relatively small. 
+	}
+	\label{fig:48_pie_chart}
+\end{figure}
+
+Alternative approaches or a different size for each part can work, as well. With the help of an iterative process, the perfect size of each piece can be determined. But as long as the results are good (defined in the requirements section), this works fine for the prototype implementation. 
 
 \section{Fit a Model}
 \label{sec:fit_a_model}
 
+The prototype uses a convolutional deep learning approach with a so-called VGG16 architecture. 
+
+This architecture can be seen in Figure \ref{fig:36_architecture_from_vgg16_net}. The name is determined by its 16 different layers which consist of convolutional layers, max-pooling layers, activation layers and fully connected layers. VGG16 is a convolution neural network (CNN) architecture which was used to win the ILSVR (ImageNet) competition in 2014. It is considered to be one of the most relevant architectures than it comes to explain these kinds of models. A unique thing about VGG16 is that instead of having a large number of hyper-parameters, the founders of this architecture focused on having convolution layers with a 3\(\times\)3 filter (stride = 1) and the same padding.
+Furthermore, it has a max-pooling layer with a 2\(\times\)2 filter (stride = 2). It follows this arrangement of convolution and max pool layers consistently throughout the whole architecture. The following arrangement of the same building blocks over and over again makes it easy to explain. This is why the architecture is perfect if its decision shall be made transparent. 
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/36_architecture_from_vgg16_net}}
+	\caption{
+		There are 13 convolutional layers, five Max Pooling layers and three Dense layers which sum up to 21 layers but only 16 weight layers. Convolutional layer 1 has 64 filters, while convolutional layer 2 has 128 filters, convolutional layer 3 has 256 filters while convolutional layer four and convolutional layer 5 has 512 filters. VGG-16 network is trained on the ImageNet dataset, which has over 14 million images and 1000 classes and archives 92.7\% top-5 accuracy. It exceeds AlexNet (another convolutional neural networks architecture) by replacing large filters of size 11 and five in the first and second convolution layers with small size 3\(\times\)3 filters.
+	}
+	\label{fig:36_architecture_from_vgg16_net}
+\end{figure}
+
+In the following, I will explain the key factors around the VGG16 convolutional neural network architecture. The building blocks are described in \hyperref[subsec:cnn]{Section \ref{subsec:cnn}}. 
+
+\begin{itemize}
+	\item There are 13 convolutional layers, five max-pooling layers and three Dense layers which sum up to 21 layers, but only 16 weight layers
+	\item The first convolutional layer has 64 filters
+	\item The second convolutional layer has 128 filters
+	\item The third convolutional layer has 256 filters 
+	\item the convolution layers four and five have 512 filters each 
+\end{itemize}
+
+The VGG-16 network is pre-trained on the ImageNet dataset, which has over 14 million images and 1000 classes and archives 92.7\% top-five accuracy. It exceeds AlexNet (another convolutional neural networks architecture) by replacing large filters of size 11 and 5 in the first and second convolution layers with small size 3\(\times\)3 filters. VGG16 achieved great results. It is used even there are more advanced architectures today because it is easy to explain. 
+
+Even though the VGG16 is the right fit for the prototype, the architecture has some disadvantages. They are mentioned in the following because they affect the implementation process: 
+
+\begin{itemize}
+	\item It has such numerous weight parameters, that the model is very "heavy". Normally, the model is bigger than 500 MBs.
+	\item Furthermore, the enormous amount of parameters lead to long computation time. 
+\end{itemize}
+
 \section{Make Predictions}
 \label{make_predictions}
+
+A highly effective approach in the deep learning field is to use someone else's work. While this approach might be a no-go in other fields, it is most welcomed in the deep learning area. This works because a pre-trained network is usually trained on a big dataset for large scale image-classification tasks. Consequently, the hierarchy of features learnt by such networks can very effectively act as generic models for a lot of computer vision problems. Even if new issues involve completely different classes, than those of the original task for which the model was trained. This shift of learnt features is important for the success of pre-trained networks. There are two ways to use a pre-trained network:
+
+\begin{enumerate}
+	\item Feature Extraction
+	\item Fine Tuning
+\end{enumerate}
+
+In general convolutional neural networks involve two parts. First, they start with a series of convolutional and pooling layers as we had seen before in the section where the VGG16 model is described in detail. Usually, the architecture ends with a flatten layer. This part is called the convolutional base. The base is responsible for learning all the features of the images. On top the convolutional base sits the prediction layers, which consists of several dense layers, ending in the output layer with a softmax activation to predict some output classes (e.g. the pre-trained VGG16 ends with a softmax layer to predict 1000 classes). This technique involves reusing the convolutional base, which has already learnt feature representations from a large image set (like ImageNet). Then a custom prediction layer gets slapped atop the pre-trained convolutional base. During the training process, the convolutional base is frozen so that its weights are not adjusted. Just the weights of the custom prediction layer gets updated (Figure \ref{fig:49_feature_extraction}). 
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/49_feature_extraction}}
+	\caption{
+		During the training process, the convolutional base is frozen (so that its weights are not updated). Weights of only the custom prediction layer get updated
+	}
+	\label{fig:49_feature_extraction}
+\end{figure}
+
+The second approach is called fine-tuning. It is not used within the prototype implementation. This is why it is not explained in every detail. The idea behind is to unfreeze a few of the top layers of the convolutional base and jointly train it with the custom prediction layer which is put atop on the convolutional base (Figure \ref{fig:50_feature_extraction}).
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/50_feature_extraction}}
+	\caption{
+		Fine Tuning means, freezing a few of the top layers of the convolutional base as in the feature extraction, and jointly train it with the custom prediction layer which we slapped atop the convolutional base.
+	}
+	\label{fig:50_feature_extraction}
+\end{figure}
 
 \section{Make Transparent Decisions}
 \label{make_transparent_decisions}
 
+SHAP Gradient Explainer was fully covered in the corresponding theory section. It is briefly summarized, and a few alternative approaches are introduced in the following. Moreover, a short statement is given why the SHAP is the right fit for the implementation of transparent decisions.
 
+Integrated gradients values are a bit different from SHAP values and require a single reference value to integrate from. However, in SHAP Gradient Explainer, expected gradients reformulate the integral as an expectation and combine that expectation with sampling reference values from the background dataset. The technique uses an entire dataset as the background distribution versus just a single reference value. 
+
+There are a wide variety of techniques and tools for interpreting decisions made by deep learning models. Except for the SHAP Gradient Explainer, the significant methods are the following:
+
+\begin{itemize}
+	\item Visualizing activation layers visualize how a given input comes out of specific activation layers. The approach explores which feature maps are getting activated in the model. 
+	\item Occlusion sensitivity visualizes how parts of the image affect deep neural networks confidence by hiding parts of the image iteratively. 
+	\item Grad-Cam visualizes how parts of the image affect neural networks output by looking into the gradients backpropagated to the class activation maps.
+	\item SmoothGrad averages the so-called sensitivity maps for an input image to identify pixels of interest. 
+\end{itemize}
+
+This gives an overview of what the neural network models do. The list of techniques here is not exhaustive. It just covers some of the most popular and widely used methods to interpret convolutional neural network models.  
+
+The decision for the SHAP is based on the following two reasons: 
+
+\begin{enumerate}
+	\item It is no longer the state of the art than it comes to make transparent decisions, but it is easy to understand.
+	\item It can be used in other machine learning fields as well. If it comes to generalization and to find a conclusion, it makes sense to have an implementation which fits a broad range of issues. 
+\end{enumerate}
+
+This chapter was very extensive because it covers a lot of necessary aspects for the implementation of the prototype. As mentioned before, detailed explanations for almost all points mentioned in this chapter are in the \hyperref[ch:theory]{Theory Chapter (\ref{ch:theory})}. Unfortunately not every detail could be considered, because otherwise, the work would be too large. Anyway, the next chapter is about the technical specifications of the prototype. More precisely, which libraries possibly exist to implement the prototype and which are finally used.

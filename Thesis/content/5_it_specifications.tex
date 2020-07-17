@@ -1,204 +1,209 @@
-
 % !TeX spellcheck = en_GB
 % !TeX encoding = UTF-8
-\chapter{Implementation}
+
+\chapter{IT-Specifications and Implementation}
 \label{ch:it_specifications}
-\epigraph{"What would life be if we had no courage to attempt anything?"}{-Vincent Van Gogh}
+\epigraph{"What would life be if we had no courage to attempt anything?"}{- Vincent Van Gogh}
 
-The first steps in the pseudocode example, which defines the functionalities of the prototype is not about \gls{xai}. It focuses on the development of a predictive model which uses deep learning. So first of all, the scope of this chapter is on the technical details of the prototype. The most popular deep learning models leveraged for computer vision problems are convolutional neural networks (CNN). The topic is already addressed in the theory chapter, but Figure \ref{fig:cnn_summary} you can see a short overview of the most important key points.
 
-\begin{figure}[htp]
-	\centering
-	\fbox{\includegraphics[width=1\linewidth]{photo/35_cnn_summary}}
-	\caption{Keypoints of an example cnn architecture (VGG16)}
-	\label{fig:cnn_summary}
-\end{figure}
+The previous two chapters focus on the theory of the prototype. In contrast, this chapter goes into detail of the implementation.
 
-\section{Developing a predictive deep learning model with transfer learning}
+\section{The Prototypes Structure}
 
-In the context of this thesis, the implementation of transparent \gls{cnn} Models is the main objective. Therefore the exact architecture and the achieved accuracy of the predictions will not be explained in the tiniest detail. Furthermore, developing and training a model costs a lot of time and effort. Instead of starting from scratch, it makes sense to build on an already existing architecture, because the effort will be less huge. Besides, it saves a lot of time to use pre-trained network.\\
-
-An opportunity is to leverage the power of transfer learning and retrained models. This model was trained on advanced hardware, with a tremendous amount of data and time to adjust the weights as close as possible to a massive amount of different claes. Considering this fact, the model has already learnt a robust hierarchy of features. Consequently, the model is useful for extract representations of features for over a million images to 1,000 different categories. So it can act as a  feature extractor for new images suitable for a computer vision problem.\\
-
-The model which is used in the prototype is the VGG16. His architecture can be seen in Figure \ref{fig:vgg16}. The name is determined by its 16 different layers which consist of Convolutional layers, max-pooling layers, activation layers and fully connected layers. 
+The structure of the prototype implementation is more or less identical to the five steps which are introduced in the requirements of the prototype (Chapter \ref{ch:requirements}). In Figure \ref{fig:51_Requirements_process_libs}, the steps are visualized again. Additionally, Figure \ref{fig:51_Requirements_process_libs} contains information about which tools are mainly used in each process step.
 
 \begin{figure}[htp]
 	\centering
-	\fbox{\includegraphics[width=1\linewidth]{photo/36_architecture_from_vgg16_net.png}}
-	\caption{Keypoints of an example cnn architecture (VGG16)}
-	\label{fig:vgg16}
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/51_Requirements_process_libs}}
+	\caption{Python and the so-called Matplotlib library are used in the overall implementation of the prototype. Whereas Python is the primary programming language, Matplotlib is used to make visualisations. Also, it is used to create diagrams for this thesis to support statements like Figure \ref{fig:47_data-set-quantative} The data engineering, the preprocessing steps, the VGG16 model and the evaluation criteria are implemented with the help of the TensorFlow library. The SHAP library is used within the last step, to make transparent decisions.}
+	\label{fig:51_Requirements_process_libs}
 \end{figure}
 
-There are 13 convolutional layers, 5 Max Pooling layers and 3 Dense layers which sum up to 21 layers but only 16 weight layers.
-Conv 1 has 64 filters while Conv 2 has 128 filters, Conv 3 has 256 filters while Conv 4 and Conv 5 has 512 filters.
-VGG-16 network is trained on ImageNet dataset, which has over 14 million images and 1000 classes, and archives 92.7\% top-5 accuracy. It exceeds AlexNet (another \gls{cnn} Architecture) by replacing large filters of size 11 and 5 in the first and second convolution layers with small size 3x3 filters.
+Python and the so-called Matplotlib library are used in the overall implementation of the prototype. Whereas Python is the primary programming language, Matplotlib is used to make visualizations. For example, if a  dataset is successfully loaded (Section \ref{sec:input_data}), the images are visualized with Matplotlib. Furthermore, Matplotlib is used to create diagrams for the thesis in order to support statements as can be seen in the following listing:
 
-Once again, the general idea behind transfer learning for image recognition is that if a model is trained (pre-trained, transfer learned) on a large and broad enough dataset, this model can be seen as a generic model approach of the real world. So it is easier to take advantage of these learned feature maps. It is much more productive instead of training such a model from scratch. To do so a massive amount of hardware resources (computation power) have to be available. 
+\nopagebreak
+\begin{python}[label={pred}, caption={Predictions of the pretrained VGG16 Architecture CNN model}]
+	colors = ( '#ece7f2','#a6bddb','#2b8cbe')
+	distincted_lables = np.array([2,10,100])
+	fig, (ax1,ax2,ax3) = plt.subplots(1, 3,figsize=(15,10))
+	ax1.bar(data_sets, data_sets_sizes, color=colors)
+	ax1.set_title("Size (MB)")
+	ax2.bar(data_sets, distincted_lables, color=colors)
+	ax2.set_title("Distinced labels")
+	ax3.bar(data_sets, (data_sets_sizes/distincted_lables), color=colors)
+	ax3.set_title("Size / Distinced Label")
+	plt.show()
+\end{python}
 
-Usually, there are two approaches which can be used to customize a pre-trained model:
+The result of the code can be seen in Figure \ref{fig:47_data-set-quantative} and is used in the section about the input data for the prototype (Section \ref{sec:input_data}).
+
+The data, the preprocessing steps, the VGG16 model and the evaluation criteria are implemented with the help of the TensorFlow library (Sections \ref{sec:input_data} - \ref{make_predictions}). The SHAP is used within the last step, to make transparent decisions (Section \ref{make_transparent_decisions}). 
+
+In the following, it is described why the tools are used within the prototype implementation. Besides, the tools are compared to alternatives. 
+
+\section{Python as programming Language for the prototype}
+
+Python is the primary programming language for the prototype implementation because of the following reasons:
 
 \begin{enumerate}
-	\item Feature Extraction: Use the representations learned by a previous network to extract important features from new samples. You add a new classifier, which will be trained from scratch, on top of the pre-trained model so that you can repurpose the feature maps learned previously for the dataset.\\
+	\item Python is the most popular language when it comes to machine learning and deep learning. This can be observed in Figure \ref{fig:52_python_popular}. It shows the percentage of matching job postings and is created by the job portal Indeed. The Figure compares the languages Python, R, Java, Javascript, C, C++, Julia and Scala  \cite{LegacyCo5:online}. 
 	
-	There is no need to train the entire model again. The base of a convolutional network already contains generically useful features.  It is therefore used to make predictions on images. However, the final, classification part of the pre-trained model is specific to the original classification task, and subsequently particular to the set of classes on which the model was trained.
+	\item Pythons excellent libraries, which allows implementing the required steps straight forward
 	
-	\item 
-	Fine-Tuning: This is a more involved technique, where we do not just replace the final layer (for classification/regression), but we also selectively retrain some of the previous layers. Deep neural networks are highly configurable architectures with various hyperparameters. As discussed earlier, the initial layers have been seen to capture generic features, while the later ones focus more on the specific task at hand. An example is depicted in the following figure on a face-recognition problem, where initial lower layers of the network learn very generic features and the higher layers learn very task-specific features.
+	\item Because of its popularity and because the language is open source,  there is a vast community to help with problems. Furthermore, a lot of documentation for Python is available online.
+	
+	\item As already named as a reason above, Python offers a variety of libraries, and some of them are excellent visualisation tools as well. However, for the prototype implementation, it is necessary to be able to represent data in a human-readable format.
+	
+	\item Libraries like Matplotlib allow building plots for better data understanding and visualisation. Different application programming interfaces also simplify the visualisation process and make it easier to generate figures for transparent decisions.  
 \end{enumerate}
 
-While keeping the functional specifications in mind, the prototype can use the machine learning framework TensorFlow. So, it can fulfil the technical requirements with state-of-the-art technology. TensorFlow is an end-to-end open-source platform for machine learning. It has a comprehensive, flexible ecosystem of tools, libraries and community resources that makes it easier to implement the prototype while not losing the scope of my focus. It will not work to explain all details of every single software library which is used in the following. Even more, since those libraries have huge documentations on the Internet. Instead the next paragraph aim on the implementation process.
+A few alternatives to Python can be seen in Figure \ref{fig:52_python_popular}. Every programming language has its downsides, and none of these languages is perfect. For example, other programming languages are maybe faster and more efficient as Python. In comparison, Python is considered as the languages with better packages and the greater community. These two points there mentioned as reasons why Python is the choice for the prototype implementation. If the community and package support would increase in other languages, the decision could be different. 
 
 \begin{figure}[htp]
 	\centering
-	\fbox{\includegraphics[width=1\linewidth]{photo/37_hierachical_feature_representations}}
-	\caption{An example is depicted in the following figure on a face-recognition problem, where initial lower layers of the network learn very generic features and the higher layers learn very task-specific features.
-	}
-	\label{fig:hierachical_feature_representations}
+	\fbox{\includegraphics[width=0.7\linewidth]{photo/52_python_popular}}
+	\caption{Python is the most popular language when it comes to machine learning and deep learning. The Figure shows the percentage of matching job postings and is created by the job portal Indeed. The Figure compares the languages Python, R, Jave, Javascript, C, C++, Julia and Scala \cite{LegacyCo5:online}.}
+	\label{fig:52_python_popular}
 \end{figure}
 
-An example of why transfer learning does work is described in  Figure \ref{fig:hierachical_feature_representations}. The example shows that \gls{dl} Systems and Models are in a layered architectures that learn different features at different layers (hierarchical representations of layered features). These layers are then finally connected to the last layer (usually a fully connected layer, in the case of supervised learning) to get the final output. This layered architecture allows utilizing a pre-trained network without its final layer as a fixed feature extractor for other tasks.
-
-The implementation of the transfer learning model follows along with these steps:
-\begin{itemize}
-	\item Examine and understand the data
-	\item Build an input pipeline, in this case using TensorFlow ImageDataGenerator
-	\item Compose the model
-	\item Load in the pre-trained base model (and pretrained weights)
-	\item Stack the classification layers on top
-	\item Train, the model
-	\item Evaluate model
-\end{itemize}
-
-Even though the dataset can be downloaded from kaggle.com the machine learning framework Tensor Flow provides an own class which held the datasets. This software package is called tfds and can be used direly to get the data on your local machine. Another advantage is that data can be split into a train and a test datasets. So, with the following lines of code step one is entirely solved:\\
-
-\begin{python}[label={lst:load}, caption= The "Dogs vs Cats" dataset gets loaded from the TensorFlow libbrary. The data will be spllited directliy into a test and train set.]
-
-# TensorFlow Function to laod a Dataset 
-
-(raw_train, raw_validation, raw_test), metadata = tfds.load(
-'cats_vs_dogs',
-
-# function which split the data into two sets,
-# such that results on unseen data can be predicted
-
-split=['train[:80%]', 'train[80%:90%]', 'train[90%:]'],
-with_info=True,
-as_supervised=True,)
-\end{python}
-
-It means the first milestones from the functional specifications are set, and step two can be set in focused now. Since the data is not just loaded onto the local machine, even more, it's split in train and test datasets a first part of the second Milestone (Data processing)is solved. Moreover, the next steps can be solved almost with the entire library and a few more dependencies, e.g. numpy-framework. A listing of the entire code and each implementation step or more detailed explanations would end in poor documentation of how the code was written. So, instead, a small summary is enough to present the most important insights from the transfer learning process.\\
-
-When working with a small dataset, it is a common practice to take advantage of features learned by a model trained on a larger dataset in the same domain. This is done by instantiating the pre-trained model and adding a fully-connected classifier on top. In the following you can see the summary of the \gls{cnn} model as it was before and for comparison how the summary looks like after adding the dataset-specific classifier layers on top. The pre-trained model is "frozen", and only the weights of the classifier get updated during training. In this case, the convolutional base extracted all the features associated with each image, and you just trained a classifier that determines the image class given. \\\\\\\\
-
-\begin{python}[label={lst:cnn_summary_before}, caption={Model summary before adding layers for the prediction of probabilities}]
-Layer (type)                    Output Shape         Param #     Connected to                     
-==============================================================
-input_1 (InputLayer)            [(None, 160, 160, 3) 0                                            
-______________________________________________________________
-Conv1_pad (ZeroPadding2D)       (None, 161, 161, 3)  0       input_1                   
-______________________________________________________________
-Conv1 (Conv2D)                  (None, 80, 80, 32)   864       Conv1_pad              
-______________________________________________________________
-...
-___________________
-block_5_depthwise_BN (BatchNorm (None, 20, 20, 192)  768    block_5_depthwise          
-______________________________________________________________
-block_5_depthwise_relu (ReLU)   (None, 20, 20, 192)  0        block_5_depthwise      
-
-Conv_1_bn (BatchNormalization)  (None, 5, 5, 1280)   5120    Conv_1                    
-______________________________________________________________
-out_relu (ReLU)                 (None, 5, 5, 1280)   0          Conv_1_bn                  
-==============================================================
-Total params: 2,257,984
-Non-trainable params: 2,257,984
-\end{python}
-
-\begin{python}[label={lst:cnn_summary_after}, caption={Model summary before adding layers for the prediction of probabilities}]
-Layer (type)                 Output Shape              Param #   
-=================================================================
-mobilenetv2_1.00_160 (Model) (None, 5, 5, 1280)        2257984   
-_________________________________________________________________
-global_average_pooling2d (Gl (None, 1280)              0         
-_________________________________________________________________
-...         
-_________________________________________________________________
-dense_1 (Dense)              (None, 1024)              1311744   
-_________________________________________________________________
-dropout_1 (Dropout)          (None, 1024)              0         
-_________________________________________________________________
-dense_2 (Dense)              (None, 512)               524800    
-_________________________________________________________________
-dropout_2 (Dropout)          (None, 512)               0         
-_________________________________________________________________
-dense_3 (Dense)              (None, 1)                 513       
-=================================================================
-Total params: 4,095,041
-Trainable params: 1,837,057
-Non-trainable params: 2,257,984
-\end{python}
-
-
-
-To present a complete overview of the implemented model in Figure \ref{fig:to_predcit} you can see four images which got predicted correct:
-
-\begin{figure}[!htp]
+\begin{figure}[htp]
 	\centering
-	\fbox{\includegraphics[width=0.85\linewidth]{photo/38_to_predict_images.png}}
-	\caption{Images which got into an machine learning algorithm (CNN-VGG16 Architecture) and got predicted correct}
-	\label{fig:to_predcit}
+	\fbox{\includegraphics[width=0.7\linewidth]{photo/53_boston_summary_plot_bar}}
+	\caption{The Figure shows a build-in visualization from the SHAP library. It can be used to plot a visualization of the SHAP values for non-image data.}
+	\label{fig:53_boston_summary_plot_bar}
 \end{figure}
 
-\begin{python}[label={pred}, caption={Predictions of the pretrained VGG-16 Architecture CNN model}]
-[['0', 'cat'], 
-['0', 'cat'], 
-['1', 'dog'], 
-['1', 'dog']]
+\section{Libraries within the Prototype implementation}
+
+\subsection{Matplotlib}
+
+Matplotlib is already mentioned in the section about the structure of the prototype as a tool for visualisation. Furthermore, it is said as one of the reasons why Python is used as the primary programming language in the first place. 
+
+Matplotlib is quite easy. Usually, while plotting, the same structure is used in every new plot. For example, for questions that arose during this thesis, Matplotlib can be used to visualise the answers in an easy way. As can be seen in the following listing, the code which is used to create two different diagrams is quite similar:
+
+\begin{python}[label={pred}, caption={Predictions of the pre-trained VGG16 Architecture CNN model}]
+	# Figure 1
+	
+	colors = ( '#ece7f2','#a6bddb','#2b8cbe')
+	distincted_lables = np.array([2,10,100])
+	fig, (ax1,ax2,ax3) = plt.subplots(1, 3,figsize=(15,10))
+	ax1.bar(data_sets, data_sets_sizes, color=colors)
+	ax1.set_title("Size (MB)")
+	ax2.bar(data_sets, distincted_lables, color=colors)
+	ax2.set_title("Distinced labels")
+	ax3.bar(data_sets, (data_sets_sizes/distincted_lables), color=colors)
+	ax3.set_title("Size / Distinced Label")
+	plt.show()
+	
+	# Figure 2
+	
+	labels = 'Train', 'Validation', 'Test',
+	sizes = [80,10,10]
+	explode = (0.1, 0, 0) 
+	plt.rcParams['font.size'] = 20    
+	fig1, ax1 = plt.subplots(figsize=(15,10))
+	ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+	shadow=True, startangle=90, colors = colors)
+	ax1.axis('equal') 
+	plt.show()
 \end{python}
 
-\section{Making Transparent Decicions}
 
-To make the predictions transparent, the Prototype uses the shap technique. It combines different ideas from Integrated Gradient, SHapley Additive exPlanations (SHAP). This technique tries to explain model decisions using expected gradients (an extension of integrated gradients). This is a feature attribution method designed for differentiable models based on an extension of Shapley values to infinite player games. The Prototype uses the shap framework here for this technique.
-Integrated gradients values are a bit different from SHAP values and require a single reference value to be integrated. However, in SHAP Gradient Explainer, expected gradients reformulate the integral as an expectation and combine that expectation with sampling reference values from the background dataset. Therefore this technique uses an entire dataset as the background distribution versus just a single reference value.\\
+The name comes from the fact that Matlab is emulated.  Matlab is an enterprise software environment and programming language which is traditionally used by scientists and companies to work on machine learning tasks. It is expensive, difficult to scale and as a programming language, it is slow in comparison with other programming languages which are introduced in Figure \ref{fig:52_python_popular}. However, Matlab offers excellent ways to implement data visualisation. So, Matplotlib in Python is used as a robust, free and easy library for data visualisation instead. 
 
-After the model has been loaded, the necessary layers have been added and a set of examples have been recognized correctly, the algorithm behind the prototype calculates the attributes for every single image example. As you can see in Listing \ref{lst:shapCode} der total amount of lines of code is pretty low and straight forward. Whereas the code itself is simple, the logic behind it is quite complex. In the Theory Chapter the fundamentals of this approach where described the following. Moreover a intuitive way to interpreted to results was presented. So, in the next chapter this intuition will be used to evaluate the results.
+Seaborn is an alternative approach than it comes to visualise data in Python. It is almost the same with libraries for visualisation and programming languages. Like described at the end of the python section, visualisation libraries have differences in use cases, scalability and many other things. So, based on this statement, the best visualisation tool for the particular example of the prototype implementation is Matplotlib. If the prototype would contain more statistics instead of image recognition, then Seaborn is the right choice because it has a lot of things suitable for mathematical tasks, built-in. The prototype has to deal with image data, and Matplotlib offers excellent opportunities to visualise them. For example, to get a first impression of the downloaded data, it takes just a few lines of code to visualise them: 
 
-\begin{lstlisting}[captionpos=b,label={lst:shapCode}, float=tb,language=Python, caption= asadd]
-# utility function to pass inputs to specific model layers
-# def map2layer(x, layer):
+\begin{python}[label={pred}, caption={Predictions of the pre-trained VGG16 Architecture CNN model}]
+	fig = plt.figure(figsize=(20, 4))
+	
+	for i in np.arange(20):
+	ax = fig.add_subplot(2, 10, i+1, xticks=[], yticks=[])
+	plt.imshow(x_train[:20][i], cmap='gray')
+	ax.set_title(cats_vs_dogs_labels[y_train[:20][i].item()])
+\end{python}
 
-feed_dict = dict(zip([model.layers[0].input], 
-[preprocess_input(x.copy())]))
+X\_train contains the image data and y\_train the corresponding labels as described in the Theory Chapter (Chapter \ref{ch:theory}).
 
-return K.get_session().run(model.layers[layer].input, feed_dict)
+\subsection{TensorFlow} 
 
-# focus on the 7th layer of CNN model
+TensorFlow is used as a full-stack library, for four out of five steps of the prototype implementation. That means it offers ways to implement data loading, data preprocessing, creating models and make predictions (Sections \ref{sec:input_data} - \ref{make_predictions}). 
 
-print(model.layers[7].input)
-Out [46]:
-<tf.Tensor 'block2_pool_2/MaxPool:0' shape=(1, 56, 56, 128)
-dtype=float32>
+TensorFlow offers different levels of abstraction. So, for the prototype implementation, a level of abstraction is used, which provides two things. First, a syntax which makes it easy to implement ideas and second enough freedom to adjust the code. To adjust the code is important because as described in the functional-specifications, the base of the pre-trained model has to be changed. If the syntax is overwhelming, it can make things worse. Mainly because the goal is to make transparent decisions, it is not good to use an abstraction level that confuses even more. This is why Keras, as a high-level application programming interface, is used as a sufficient level of abstraction. 
 
-# make model predictions
+For example, if it comes to implement a VGG16 architecture as described in the functional specifics, this can help a lot. In the following listings, two things can be observed. First, the code which is used in the prototype implementation needs just a few lines of code to load a pre-trained VGG16 model. That means the code offers two things as well. At first, the model is written as executable code, and then the pre-adjusted weights get loaded:
 
-e = shap.GradientExplainer((model.layers[7].input,
-model.layers[-1].output), map2layer(
-preprocess_input(X.copy()), 7))
-shap_values, indexes = e.shap_values(map2layer(to_predict, 7),
-ranked_outputs=2)
-index_names = np.vectorize(lambda x:
-class_names[str(x)][1])(indexes)
+\begin{python}[label={pred}, caption={Predictions of the pre-trained VGG16 Architecture CNN model}]
+	from keras.applications.vgg16 import VGG16
+	
+	model = VGG16(weights='imagenet', include_top=True)
+	model.summary()
+\end{python}
 
-print(index_names)
+The following listing shows an implementation from scratch, of a simple neural network with just one neuron:
 
-Out [47]: array([['chain', 'chain_mail'],
-['great_grey_owl', 'prairie_chicken'],
-['desktop_computer', 'screen'],
-['Egyptian_cat', 'tabby']], dtype='<U16')
+\begin{python}[label={pred}, caption={Predictions of the pretrained VGG16 Architecture CNN model}]
+	class NeuralNetwork:
+	def __init__(self, x, y):
+	self.input      = x
+	self.weights1   = np.random.rand(self.input.shape[1],4) 
+	self.weights2   = np.random.rand(4,1)                 
+	self.y          = y
+	self.output     = np.zeros(self.y.shape)
+	
+	def feedforward(self):
+	self.layer1 = sigmoid(np.dot(self.input, self.weights1))
+	self.output = sigmoid(np.dot(self.layer1, self.weights2))
+	
+	def backprop(self):
+	# application of the chain rule to find derivative of the loss function with respect to weights2 and weights1
+	d_weights2 = np.dot(self.layer1.T, (2*(self.y - self.output) * sigmoid_derivative(self.output)))
+	d_weights1 = np.dot(self.input.T,  (np.dot(2*(self.y - self.output) * sigmoid_derivative(self.output), self.weights2.T) * sigmoid_derivative(self.layer1)))
+	
+	# update the weights with the derivative (slope) of the loss function
+	self.weights1 += d_weights1
+	self.weights2 += d_weights2
+\end{python}
 
-# visualize model decisions
-visualize_model_decisions(shap_values=shap_values, x=to_predict, 
-labels=index_names, figsize=(20, 40))
-\end{lstlisting}
+It has more lines of code, even though the model is so simple. This points out the importance of a library than it comes to the implementation of a deep learning model.
 
+Furthermore, the library is used to get the data and adjust it such it fits to the use case of my prototype. Instead of download the data by hand and use multiple libraries to get the result, TensorFlow provides a very handy end-to-end solution for the first two steps. With just one function call it downloads the images, scales them and split them into different parts:
 
+\begin{python}[label={pred}, caption={Predictions of the pre-trained VGG16 Architecture CNN model}]
+	(raw_train, raw_validation, raw_test), metadata = this.load(
+	'cats_vs_dogs',
+	split=['train[:80%]', 'train[80%:90%]', 'train[90%:]'],
+	with_info=True,
+	as_supervised=True,
+	)
+\end{python}
 
+Even the alternative library PyThorch is faster, and its syntax is even more apparent, the opportunities to handle two out of five steps with just one function call made the decision clear. TensorFlow is the best fit for the prototype implementation because it allows implementing the whole prototype with just a few lines of code. 
+
+\subsection{SHAP Library for transparent decision}
+
+Based on the work of Luneberg and Lee, the SHAP library offers a method which allows computing the SHAP values after each iteration from each layer.  For a visualization, as described in the requirements (Chapter \ref{ch:requirements}) and the functional specifics (Chapter \ref{ch:functional_specifications}), a separate implemented function is required. The SHAP software library others different classes and methods which optimise the calculation of SHAP values for various machine learning approaches. The prototype uses deep explainer, which is optimised for deep learning models. It is not only for convolutional neural networks, but at least, the implementation works fine and comes to a result in a sufficed amount of time. 
+
+There is no approach which provides similar functionalities and classes as the SHAP Library. This is why the library can not be compared with others and has to be used for the calculations. Otherwise, the implementation has to be done from scratch. 
+
+\subsection{Implementation}
+
+Data visualisation and model explainability are two integral aspects of the prototype implementation. They are the binoculars helping to see the patterns in the data, which lead to prototypes decisions. That is why the prototype uses a function which combines the original image with another layer that shows the calculated values on top. The visualisation is based on the visualisation, which is already offered by the SHAP library for non-image data. Figure \ref{fig:53_boston_summary_plot_bar} shows such a kind of visualization from the SHAP library. 
+
+It can just be implemented by calling the shap\_plot() Method. As a parameter, it gets the features, the calculated SHAP values and the corresponding machine learning model. The function which is implemented in the prototype works similar. However, it allows - by the following function call - to get visualizations of the SHAP values for image data:
+
+\nopagebreak
+\begin{python}[label={pred}, caption={Predictions of the pretrained VGG16 Architecture CNN model}]
+	visualize_model_decisions(shap_values=shap_values, x=to_predict, 
+	labels=index_names, figsize=(20, 40))
+\end{python}
+
+The output of the function can be seen in Figure \ref{fig:41_expected_gradients_layer_7}. More precisely, the images show how the function was used on the dataset after predictions were made.
+
+\begin{figure}[htp]
+	\centering
+	\fbox{\includegraphics[width=0.9\linewidth]{photo/41_expected_gradients_layer_7}}
+	\caption{The output of the visulaize\_model\_deciions function. More precisely, the images show how the function was used on the dataset after predictions were made to visualize the SHAP values of the 7th layer in a convolutional neural network.}
+	\label{fig:41_expected_gradients_layer_7}
+\end{figure}
+
+Note that not every aspect of the shown listings is explained in any detail. They provide a better understanding of the mentioned points in each section. The theoretical background and the functional usage towards the listings is described in the corresponding section at the Functional Specifications (Chapter \ref{ch:functional_specifications}) and \hyperref[ch:theory]{Theory Chapter (\ref{ch:theory})}. 
